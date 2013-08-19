@@ -7,9 +7,10 @@ int main(int argc, char** argv)
     boost::asio::io_service io;
 
     boost::shared_ptr<WorldAcceptor> pAcceptor = boost::make_shared<WorldAcceptor>(io);
-    World* pWorld = new World;
+    World* pWorld = new World(io);
     pAcceptor->Accept();
     pWorld->Run();
+    io.run();
 
     delete pWorld;
     return 0;

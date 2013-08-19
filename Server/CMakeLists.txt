@@ -8,8 +8,6 @@ FIND_PACKAGE(MySQLConnectorCPP)
 FIND_PACKAGE(CryptoPP)
 FIND_PACKAGE(Threads)
 
-add_definitions(-DBOOST_CHRONO_HEADER_ONLY)
-
 link_directories(${Boost_LIBRARY_DIRS})
 
 include_directories(
