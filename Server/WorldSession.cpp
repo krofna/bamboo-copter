@@ -1,6 +1,11 @@
 #include "WorldSession.hpp"
 #include "Shared/Log.hpp"
 
+WorldSession::WorldSession(io_service& io) :
+TCPSession(io)
+{
+}
+
 void TCPSession::HandleTemplate()
 {
     ((WorldSession*)this)->HandleSMSG();

@@ -1,6 +1,6 @@
 #include "Game.hpp"
 #include "DataMgr.hpp"
-#include "World.hpp"
+#include "Shared/World.hpp"
 #include "Shared/Opcodes.hpp"
 
 int main(int argc, char** argv)

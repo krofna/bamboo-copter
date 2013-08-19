@@ -5,9 +5,9 @@
 
 class WorldSession : public TCPSession
 {
+    friend class WorldAcceptor;
 public:
     WorldSession(io_service& io);
-    ~WorldSession();
 
     void HandleSMSG();
 
