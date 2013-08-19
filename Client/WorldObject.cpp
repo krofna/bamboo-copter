@@ -1,6 +1,6 @@
 #include "WorldObject.hpp"
 #include "DataMgr.hpp"
-#include "GameState.hpp"
+#include "Shared/Defines.hpp"
 
 WorldObject::WorldObject(uint32 Entry)
 {

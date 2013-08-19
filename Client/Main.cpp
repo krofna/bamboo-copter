@@ -18,7 +18,7 @@ int main(int argc, char** argv)
             WorldObject* pObject = new WorldObject(1);
             pObject->SetPosition(sf::Vector2f(TILE_SIZE * float(i), TILE_SIZE * float(j)));
             pObject->SetAnimation(0);
-            pObject->SetAnimationSpeed(sf::seconds(2));
+            pObject->SetAnimationSpeed(sf::seconds(1));
             pObject->SetSize(sf::Vector2f(TILE_SIZE, TILE_SIZE));
             pWorld->Insert(pObject);
         }
