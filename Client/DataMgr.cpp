@@ -28,6 +28,7 @@ CAnimationTemplate* DataMgr::GetAnimationTemplate(uint32 Entry)
     return &Animations[Entry];
 }
 
+// Mozda bi ovo trebalo biti lokalno: u fajlovima a ne paketima?
 CAnimationTemplate DataMgr::LoadAnimationTemplate(Packet& Pckt)
 {
     CAnimationTemplate Template;

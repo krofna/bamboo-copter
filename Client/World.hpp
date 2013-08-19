@@ -2,7 +2,7 @@
 #define WORLD_HPP
 
 #include "Shared/QuadTree.hpp"
-#include "GameState.hpp"
+#include "Shared/GameState.hpp"
 
 class World : public QuadTree, public GameState
 {

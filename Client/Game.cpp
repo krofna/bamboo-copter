@@ -1,5 +1,5 @@
 #include "Game.hpp"
-#include "GameState.hpp"
+#include "Shared/GameState.hpp"
 
 Game::Game() :
 StateStack(STATE_MAX),
