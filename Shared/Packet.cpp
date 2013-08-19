@@ -106,7 +106,10 @@ Packet& Packet::operator <<(float data)   { Append<float>(data);  return *this; 
 Packet& Packet::operator <<(std::string data)
 {
     IncreaseBufferSize(data.size() + 1);
-    std::memcpy(&ByteBuffer[WritePos], data.c_str(), data.size()+1);
+
+    std::copy(data.begin(), data.end(), &ByteBuffer[WritePos]); // Raito : std::copy is better because it will know what it should call : memmove or memcpy.
+    ByteBuffer[WritePos + data.size()] = '\0'; // We can do more simpler, by using std::copy(data.c_str(), data.c_str() + data.size() + 1), but ... the code is more complex. As you wish.
+
     WritePos += data.size(); ++WritePos;
     return *this; 
 }
@@ -122,11 +125,8 @@ Packet& Packet::operator >>(int64& data)  { data = Read<int64>(); return *this; 
 Packet& Packet::operator >>(float& data)  { data = Read<float>(); return *this; }
 Packet& Packet::operator >>(std::string& data)
 {
-    char* pBBuf = &ByteBuffer[ReadPos];
-    char* pNull = pBBuf;
-    while(*pNull) ++pNull;
-    data.resize(pNull-pBBuf);
-    std::memcpy(&data[0], pBBuf, data.size());
+    // Raito : You've recreated std::strlen.
+    data.assign(&ByteBuffer[ReadPos], std::char_traits<char>::length(&ByteBuffer[ReadPos])); // This should copy only characters, and exclude \0 character.
     ReadPos += data.size(); ++ReadPos;
     return *this; 
 }
