@@ -1,0 +1,45 @@
+set (EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/Build/Server/)
+set (CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/Build)
+
+include(FindThreads)
+
+FIND_PACKAGE(Boost COMPONENTS system REQUIRED)
+FIND_PACKAGE(MySQLConnectorCPP)
+FIND_PACKAGE(CryptoPP)
+FIND_PACKAGE(Threads)
+
+add_definitions(-DBOOST_CHRONO_HEADER_ONLY)
+
+link_directories(${Boost_LIBRARY_DIRS})
+
+include_directories(
+${CMAKE_SOURCE_DIR}/Server/
+${CMAKE_SOURCE_DIR}/
+${Boost_INCLUDE_DIRS}
+${MYSQLCONNECTORCPP_INCLUDE_DIR}
+)
+
+file(
+GLOB_RECURSE
+SHARED_SRC
+${CMAKE_SOURCE_DIR}/Shared/*
+)
+file(
+GLOB_RECURSE
+SERVER_SRC
+${CMAKE_SOURCE_DIR}/Server/*
+)
+file(
+GLOB
+SERVER_LIBS
+${Boost_LIBRARIES}
+${MYSQLCONNECTORCPP_LIBRARIES}
+${CMAKE_THREAD_LIBS_INIT}
+${CRYPTOPP_LIBRARIES}
+)
+
+add_executable(Server
+    ${SERVER_SRC}
+    ${SHARED_SRC})
+target_link_libraries(Server
+    ${SERVER_LIBS})
