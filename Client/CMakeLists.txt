@@ -22,7 +22,11 @@ ${CMAKE_SOURCE_DIR}/
 file(
 GLOB_RECURSE
 SHARED_SRC
-${CMAKE_SOURCE_DIR}/Shared/*
+${CMAKE_SOURCE_DIR}/Shared/Log.cpp
+${CMAKE_SOURCE_DIR}/Shared/Opcodes.cpp
+${CMAKE_SOURCE_DIR}/Shared/Packet.cpp
+${CMAKE_SOURCE_DIR}/Shared/QuadTree.cpp
+${CMAKE_SOURCE_DIR}/Shared/TCPSession.cpp
 )
 
 file(
