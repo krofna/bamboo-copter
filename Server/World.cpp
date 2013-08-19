@@ -1,5 +1,6 @@
 #include "World.hpp"
 #include <thread>
+#include <chrono>
 
 #define HEARTBEAT 50
 
@@ -18,12 +19,12 @@ void World::Run()
         while (Elapsed.time_since_epoch() > std::chrono::milliseconds(HEARTBEAT))
         {
             Elapsed -= std::chrono::milliseconds(HEARTBEAT);
-            Update(std::chrono::duration_cast<std::chrono::milliseconds>(Elapsed.time_since_epoch()));
+            Update();
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(HEARTBEAT) - std::chrono::duration_cast<std::chrono::milliseconds>(Elapsed.time_since_epoch()));
     }
 }
 
-void World::Update(std::chrono::milliseconds diff)
+void World::Update()
 {
 }
