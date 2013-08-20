@@ -22,8 +22,8 @@ void Game::Run()
         {
             elapsed -= sf::milliseconds(GAME_HEARTBEAT);
 
-            StateMutex.try_lock();
-            pState = StateStack.Top();
+            if (StateMutex.try_lock())
+                pState = StateStack.Top();
             StateMutex.unlock();
 
             while (Window.pollEvent(event))
