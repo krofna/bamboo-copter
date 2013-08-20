@@ -42,9 +42,10 @@ void DataMgr::ProcessAnimationTemplateFile(File& DataFile)
     uint8 NumFrames;
     uint8 x, y;
 
-    while (DataFile)
+    while (true)
     {
         DataFile >> Entry;
+        if (!DataFile) break;
         DataFile >> Texture;
         Template.pTexture = new sf::Texture;
         Template.pTexture->loadFromFile(Texture);
