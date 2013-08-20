@@ -4,6 +4,7 @@
 #include <map>
 #include "Shared/Packet.hpp"
 #include "Shared/Templates.hpp"
+#include "Shared/File.hpp"
 
 class WorldObject;
 
@@ -13,12 +14,10 @@ public:
     ~DataMgr();
 
     void ProcessPacket(Packet& Pckt);
-
     CAnimationTemplate* GetAnimationTemplate(uint32 Entry);
 
 private:
-    CAnimationTemplate LoadAnimationTemplate(Packet& Pckt);
-
+    void ProcessAnimationTemplateFile(File& DataFile);
     std::map<uint32, CAnimationTemplate> Animations;
 };
 

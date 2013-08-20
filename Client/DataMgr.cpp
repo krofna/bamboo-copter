@@ -2,6 +2,7 @@
 #include "WorldObject.hpp"
 #include <SFML/Graphics/Texture.hpp>
 #include "Shared/Defines.hpp"
+#include "Shared/File.hpp"
 
 DataMgr* sDataMgr;
 
@@ -11,48 +12,56 @@ DataMgr::~DataMgr()
 
 void DataMgr::ProcessPacket(Packet& Pckt)
 {
+    std::string Path;
     uint8 Type;
-    uint32 Entry;
-    Pckt >> Entry >> Type;
 
+    Pckt >> Path >> Type;
+    File DataFile(Path, std::ios::in);
     switch (Type)
     {
         case NULL_TEMPLATE: assert(false);
-        case ANIMATION_TEMPLATE: Animations[Entry] = LoadAnimationTemplate(Pckt); break;
+        case ANIMATION_TEMPLATE: ProcessAnimationTemplateFile(DataFile); break;
         default: assert(false);
     }
 }
 
 CAnimationTemplate* DataMgr::GetAnimationTemplate(uint32 Entry)
 {
-    return &Animations[Entry];
+    auto i = Animations.find(Entry);
+    if (i != Animations.end())
+        return &i->second;
+    return nullptr;
 }
 
-// Mozda bi ovo trebalo biti lokalno: u fajlovima a ne paketima?
-CAnimationTemplate DataMgr::LoadAnimationTemplate(Packet& Pckt)
+void DataMgr::ProcessAnimationTemplateFile(File& DataFile)
 {
     CAnimationTemplate Template;
+    uint32 Entry;
     std::string Texture;
     uint8 NumAnims;
     uint8 NumFrames;
     uint8 x, y;
 
-    Pckt >> Texture;
-    Template.pTexture = new sf::Texture;
-    Template.pTexture->loadFromFile(Texture);
-    Pckt >> NumAnims;
-    Template.FramesPerAnim.resize(NumAnims);
-    Template.TexPos.resize(NumAnims);
-    for (uint8 i = 0; i < NumAnims; ++i)
+    while (DataFile)
     {
-        Pckt >> NumFrames;
-        Template.FramesPerAnim[i] = NumFrames;
-        Template.TexPos[i].resize(NumFrames);
-        for (int j = 0; j < NumFrames; ++j)
+        DataFile >> Entry;
+        DataFile >> Texture;
+        Template.pTexture = new sf::Texture;
+        Template.pTexture->loadFromFile(Texture);
+        DataFile >> NumAnims;
+        Template.FramesPerAnim.resize(NumAnims);
+        Template.TexPos.resize(NumAnims);
+        for (uint8 i = 0; i < NumAnims; ++i)
         {
-            Pckt >> x >> y;
-            Template.TexPos[i][j] = sf::Vector2<uint16>(x * TILE_SIZE, y * TILE_SIZE);
+            DataFile >> NumFrames;
+            Template.FramesPerAnim[i] = NumFrames;
+            Template.TexPos[i].resize(NumFrames);
+            for (int j = 0; j < NumFrames; ++j)
+            {
+                DataFile >> x >> y;
+                Template.TexPos[i][j] = sf::Vector2<uint16>(x * TILE_SIZE, y * TILE_SIZE);
+            }
         }
+        Animations[Entry] = Template;
     }
-    return Template;
 }

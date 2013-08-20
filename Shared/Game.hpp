@@ -10,7 +10,7 @@ class GameState;
 class Game
 {
 public:
-    Game();
+    Game(const char* Name);
     void Run();
     void PushState(GameState* pState);
     void PopState();

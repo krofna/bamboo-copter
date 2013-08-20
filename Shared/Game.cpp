@@ -1,9 +1,9 @@
 #include "Game.hpp"
 #include "Shared/GameState.hpp"
 
-Game::Game() :
+Game::Game(const char* Name) :
 StateStack(STATE_MAX),
-Window(sf::VideoMode::getDesktopMode(), "beech-copter")
+Window(sf::VideoMode::getDesktopMode(), Name)
 {
     Window.setFramerateLimit(65);
 }
