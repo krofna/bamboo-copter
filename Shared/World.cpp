@@ -36,6 +36,19 @@ void World::HandleEvent(sf::Event Event)
         else if(sf::Mouse::getPosition(Window).y < TILE_SIZE / 2)
             View.move(0, -TILE_SIZE);
         Window.setView(View);
+    break;
+    case sf::Event::KeyPressed:
+        switch (Event.key.code)
+        {
+            case sf::Keyboard::Escape:
+                Window.close();
+            break;
+            default:
+            break;
+        }
+    break;
+    case sf::Event::Closed:
+        Window.close();
     default:
         break;
     }
