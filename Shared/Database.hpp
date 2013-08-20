@@ -8,7 +8,7 @@
 #include <cppconn/resultset.h>
 #include <cppconn/statement.h>
 #include <cppconn/prepared_statement.h>
-
+#include <boost/format.hpp>
 #include <memory>
 
 typedef std::unique_ptr<sql::ResultSet> QueryResult;
@@ -40,6 +40,27 @@ private:
     PStatementPtr PStatement;
 };
 
+inline std::string Format(boost::format& formater)
+{
+    return formater.str();
+}
+
+inline std::string Format(std::string const& ToFormat)
+{
+    return ToFormat;
+}
+
+template<typename T, typename... Values>
+inline std::string Format(boost::format& formater, T const& Val, Values... Vals)
+{
+    return Format(formater % Val, std::forward<Values>(Vals)...);
+}
+
+template<typename T, typename... Values>
+inline std::string Format(std::string const& ToFormat, T const& Val, Values... Vals)
+{
+    return Format(boost::format(ToFormat) % Val, std::forward<Values>(Vals)...);
+}
 
 template<typename... Values>
 void Database::PExecute(std::string const& sql, Values... values)

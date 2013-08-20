@@ -1,4 +1,6 @@
 #include "World.hpp"
+#include "Shared/Database.hpp"
+#include "Map.hpp"
 #include <thread>
 #include <chrono>
 
@@ -7,6 +9,21 @@
 World::World(boost::asio::io_service& io) :
 io(io)
 {
+}
+
+void World::Load()
+{
+    QueryResult Result(sDatabase.PQuery("SELECT `name`, `guid` FROM `maps`"));
+    std::string MapName;
+    uint64 MapGUID;
+
+    while (Result->next())
+    {
+        MapName = Result->getString(1);
+        MapGUID = Result->getUInt64(2);
+        Map* pMap = new Map(MapName, MapGUID);
+        pMap->LoadObjects();
+    }
 }
 
 void World::Run()

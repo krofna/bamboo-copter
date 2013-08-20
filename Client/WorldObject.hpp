@@ -14,7 +14,7 @@ class WorldObject
 public:
     WorldObject(uint32 Entry);
 
-    Rectangle GetRect() const;
+    Rectangle<float> GetRect() const;
     void Draw(sf::RenderWindow& Window);
     void Update();
     void SetPosition(sf::Vector2f NewPos);

@@ -8,9 +8,9 @@ WorldObject::WorldObject(uint32 Entry)
     Sprite.setTexture(*pTemplate->pTexture);
 }
 
-Rectangle WorldObject::GetRect() const
+Rectangle<float> WorldObject::GetRect() const
 {
-    return Rectangle(Sprite.getPosition(), Size);
+    return Rectangle<float>(Sprite.getPosition(), Size);
 }
 
 void WorldObject::Draw(sf::RenderWindow& Window)

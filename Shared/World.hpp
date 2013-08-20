@@ -4,7 +4,7 @@
 #include "Shared/QuadTree.hpp"
 #include "Shared/GameState.hpp"
 
-class World : public QuadTree, public GameState
+class World : public QuadTree<float>, public GameState
 {
 public:
     World(sf::RenderWindow& Window);

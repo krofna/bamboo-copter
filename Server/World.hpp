@@ -9,6 +9,7 @@ class World
 public:
     World(boost::asio::io_service& io);
 
+    void Load();
     void Run();
     void Update();
 

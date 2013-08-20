@@ -1,8 +1,6 @@
 #include "World.hpp"
-#include <limits>
 
 World::World(sf::RenderWindow& Window) :
-QuadTree(Rectangle(sf::Vector2f(0, 0), sf::Vector2f(std::numeric_limits<uint32>::max(), std::numeric_limits<uint32>::max())), nullptr),
 View(sf::FloatRect(0, 0, Window.getSize().x, Window.getSize().y)),
 Window(Window)
 {

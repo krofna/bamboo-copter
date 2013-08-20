@@ -14,7 +14,6 @@ using namespace boost::asio;
 typedef boost::asio::deadline_timer DeadlineTimer;
 typedef boost::asio::ip::tcp::endpoint TCPEndpoint;
 typedef boost::asio::ip::tcp::socket TCPSocket;
-typedef boost::asio::ip::tcp::acceptor TCPAcceptor;
 template <class T> using Queue = std::queue<T>;
 
 class TCPSession : private boost::noncopyable, public boost::enable_shared_from_this<TCPSession>
@@ -27,6 +26,7 @@ public:
 
     void HandleNULL();
     void HandleTemplate();
+    void HandleLogin();
 
 protected:
     void Start();

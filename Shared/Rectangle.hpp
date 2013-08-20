@@ -3,24 +3,25 @@
 
 #include <SFML/Graphics/Rect.hpp>
 
-struct Rectangle : sf::Rect<float>
+template <class T>
+struct Rectangle : sf::Rect<T>
 {
-    Rectangle(sf::Vector2f NW, sf::Vector2f Size) : sf::Rect<float>(NW, Size)
+    Rectangle(sf::Vector2<T> NW, sf::Vector2<T> Size) : sf::Rect<T>(NW, Size)
     {
     }
 
-    Rectangle(const sf::Rect<float>& Rect) : sf::Rect<float>(Rect)
+    Rectangle(const sf::Rect<T>& Rect) : sf::Rect<T>(Rect)
     {
     }
 
-    inline sf::Vector2f NW()
+    inline sf::Vector2<T> NW()
     {
-        return sf::Vector2f(left, top);
+        return sf::Vector2<T>(this->left, this->top);
     }
 
-    inline sf::Vector2f Size()
+    inline sf::Vector2<T> Size()
     {
-        return sf::Vector2f(width, height);
+        return sf::Vector2<T>(this->width, this->height);
     }
 };
 

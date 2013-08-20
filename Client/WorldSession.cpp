@@ -33,3 +33,7 @@ void TCPSession::HandleTemplate()
 {
     sDataMgr->ProcessPacket(RecPckt);
 }
+
+void TCPSession::HandleLogin()
+{
+}
