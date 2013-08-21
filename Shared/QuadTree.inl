@@ -2,7 +2,7 @@ template <class U> template <class T>
 void QuadTree<U>::Traverse(T Func)
 {
     if (pParent)
-        Foreach(Func);
+        LinkedList::Foreach(Func);
 
     if (!NW)
         return;
@@ -21,7 +21,7 @@ void QuadTree<U>::TraverseArea(Rectangle<U> Area, T Func)
         if (!this->Area.intersects(Area))
             return;
 
-        Foreach(Func);
+        LinkedList::Foreach(Func);
     }
 
     if (!NW)
@@ -33,15 +33,6 @@ void QuadTree<U>::TraverseArea(Rectangle<U> Area, T Func)
     SE->TraverseArea(Area, Func);
 }
 
-template <class U> template <class T>
-void QuadTree<U>::Foreach(T Func)
-{
-    for (LinkedList* pIter = this; pIter != nullptr; pIter = pIter->Next())
-        if (WorldObject* pObject = pIter->Data())
-            Func(pObject);
-}
-
-
 template <class U>
 QuadTree<U>::QuadTree() :
 QuadTree(Rectangle<U>(sf::Vector2<U>(0, 0), sf::Vector2<U>(std::numeric_limits<uint32>::max(), std::numeric_limits<uint32>::max())), nullptr)
@@ -50,7 +41,6 @@ QuadTree(Rectangle<U>(sf::Vector2<U>(0, 0), sf::Vector2<U>(std::numeric_limits<u
 
 template <class U>
 QuadTree<U>::QuadTree(Rectangle<U> Area, QuadTree* pParent) :
-LinkedList(nullptr, nullptr),
 Size(0),
 Area(Area),
 pParent(pParent),

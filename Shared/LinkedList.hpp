@@ -5,6 +5,7 @@ template <class T>
 class LinkedList
 {
 public:
+    LinkedList();
     LinkedList(LinkedList* pPrev, T* pData);
     virtual ~LinkedList();
 
@@ -13,11 +14,20 @@ public:
     T* Data() const;
     void Insert(T* pData);
 
+    template <class F>
+    void Foreach(F Func);
+
 private:
     LinkedList* pPrev;
     LinkedList* pNext;
     T* pData;
 };
+
+template <class T>
+LinkedList<T>::LinkedList() :
+LinkedList(nullptr, nullptr)
+{
+}
 
 template <class T>
 LinkedList<T>::LinkedList(LinkedList* pPrev, T* pData) :
@@ -67,4 +77,11 @@ void LinkedList<T>::Insert(T* pData)
     }
 }
 
+template <class T> template <class F>
+void LinkedList<T>::Foreach(F Func)
+{
+    for (LinkedList* pIter = this; pIter != nullptr; pIter = pIter->Next())
+        if (T* pObject = pIter->Data())
+            Func(pObject);
+}
 #endif

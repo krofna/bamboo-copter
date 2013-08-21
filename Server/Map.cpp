@@ -1,6 +1,5 @@
 #include "Map.hpp"
 #include "Shared/Database.hpp"
-#include "Player.hpp"
 
 Map::Map(std::string Name, uint64 GUID) :
 Name(Name),
@@ -30,4 +29,14 @@ void Map::LoadObjects()
         pObject = new Player(GUID, Entry, x, y);
         QuadTree::Insert(pObject);
     }
+}
+
+void Map::AddPlayer(Player* pPlayer)
+{
+    OnlinePlayers.Insert(pPlayer);
+}
+
+void Map::SendToPlayers(Packet& Pckt)
+{
+    OnlinePlayers.Foreach(std::bind(&Player::SendPacket, std::placeholders::_1, std::ref(Pckt)));
 }
