@@ -16,7 +16,7 @@ if (CMAKE_COMPILER_IS_GNUCXX)
     add_definitions(-Wall)
     add_definitions(-Werror)
     add_definitions(-Wvariadic-macros)
-    set(CMAKE_CXX_FLAGS "-lpthread" ${CMAKE_CXX_FLAGS})
+    set(CMAKE_CXX_FLAGS "-pthread" ${CMAKE_CXX_FLAGS})
 elseif (MSVC)
 
     if (MSVC_VERSION LESS 1700)
