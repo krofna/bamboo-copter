@@ -47,7 +47,7 @@ void TCPSession::HandleReceive(const boost::system::error_code& Error)
 
     sLog.Write(LOG_INFO, "Received Packet: %s, size: %u", OpcodeTable[RecPckt.GetOpcode()].name, RecPckt.GetSizeWithoutHeader());
 
-    (this->*OpcodeTable[RecPckt.GetOpcode()].Handler)();
+    (((WorldSession*)this)->*OpcodeTable[RecPckt.GetOpcode()].Handler)();
     Start();
 }
 
@@ -73,9 +73,4 @@ void TCPSession::HandleSend(const boost::system::error_code& Error)
     if (!MessageQueue.empty())
         async_write(Socket, buffer(MessageQueue.front().GetDataWithHeader(), MessageQueue.front().GetSizeWithHeader()),
             boost::bind(&TCPSession::HandleSend, shared_from_this(), placeholders::error));
-}
-
-void TCPSession::HandleNULL()
-{
-    sLog.Write(LOG_ERROR, "Received strange opcode: %s", OpcodeTable[RecPckt.GetOpcode()].name);
 }

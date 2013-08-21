@@ -1,6 +1,7 @@
 #include "WorldSession.hpp"
 #include "Shared/Log.hpp"
 #include "DataMgr.hpp"
+#include "Shared/Opcodes.hpp"
 
 #include <boost/asio/connect.hpp>
 #include <boost/bind/bind.hpp>
@@ -29,11 +30,21 @@ void WorldSession::OnConnect(const boost::system::error_code& Error)
         Start();
 }
 
-void TCPSession::HandleTemplate()
+void WorldSession::HandleTemplate()
 {
     sDataMgr->ProcessPacket(RecPckt);
 }
 
-void TCPSession::HandleLogin()
+void WorldSession::HandleLogin()
 {
 }
+
+void WorldSession::HandleObjectCreate()
+{
+}
+
+void WorldSession::HandleNULL()
+{
+    sLog.Write(LOG_ERROR, "Received strange opcode: %s", OpcodeTable[RecPckt.GetOpcode()].name);
+}
+

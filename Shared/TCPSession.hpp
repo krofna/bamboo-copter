@@ -24,10 +24,6 @@ public:
 
     void Send(Packet& Pckt);
 
-    void HandleNULL();
-    void HandleTemplate();
-    void HandleLogin();
-
 protected:
     void Start();
     void HandleSend(const boost::system::error_code& Error);

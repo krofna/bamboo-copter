@@ -14,6 +14,11 @@ public:
     WorldSession(io_service& io);
     ~WorldSession();
 
+    void HandleNULL();
+    void HandleTemplate();
+    void HandleLogin();
+    void HandleObjectCreate();
+
     void Connect(std::string IP, std::string Port);
 
 private:

@@ -9,7 +9,8 @@ class WorldSession : public TCPSession
 public:
     WorldSession(io_service& io);
 
-    void HandleSMSG();
+    void HandleNULL();
+    void HandleLogin();
 
 private:
 };

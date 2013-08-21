@@ -1,7 +1,7 @@
 #ifndef OPCODES_HPP
 #define OPCODES_HPP
 
-class TCPSession;
+class WorldSession;
 
 enum Opcodes
 {
@@ -15,7 +15,7 @@ enum Opcodes
 struct OpcodeHandler
 {
     char const* name;
-    void (TCPSession::*Handler)();
+    void (WorldSession::*Handler)();
 };
 
 extern OpcodeHandler OpcodeTable[MSG_COUNT];
