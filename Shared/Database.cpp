@@ -1,5 +1,4 @@
 #include "Shared/Database.hpp"
-#include "Shared/Utils.hpp"
 #include <fstream>
 #include <cstdarg>
 #include <sstream>
