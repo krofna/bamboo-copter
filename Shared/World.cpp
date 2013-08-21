@@ -12,15 +12,15 @@ World::~World()
 
 void World::Draw()
 {
-    if (ObjectMutex.try_lock())
-        QuadTree::TraverseArea(View.getViewport(), std::bind(&WorldObject::Draw, std::placeholders::_1, std::ref(Window)));
+    ObjectMutex.lock();
+    QuadTree::TraverseArea(View.getViewport(), std::bind(&WorldObject::Draw, std::placeholders::_1, std::ref(Window)));
     ObjectMutex.unlock();
 }
 
 void World::Update()
 {
-    if (ObjectMutex.try_lock())
-        QuadTree::TraverseArea(View.getViewport(), std::bind(&WorldObject::Update, std::placeholders::_1));
+    ObjectMutex.lock();
+    QuadTree::TraverseArea(View.getViewport(), std::bind(&WorldObject::Update, std::placeholders::_1));
     ObjectMutex.unlock();
 }
 
