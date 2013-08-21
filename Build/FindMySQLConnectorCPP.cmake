@@ -8,6 +8,9 @@
 # The user may wish to set, in the CMake GUI or otherwise, this variable:
 #  MYSQLCONNECTORCPP_ROOT_DIR - path to start searching for the module
 
+# Author : Raito Bezarius. (@ChocolatAuLait_)
+# TODO : Support Debug version of Linux libs.
+
 set(MYSQLCONNECTORCPP_ROOT_DIR
         "${MYSQLCONNECTORCPP_ROOT_DIR}"
         CACHE
@@ -20,19 +23,29 @@ if(WIN32)
             mysql_connection.h
             PATHS
             "C:\\Program Files"
+            "C:\\Program Files (x86)"
             HINTS
             ${MYSQLCONNECTORCPP_ROOT_DIR}
             PATH_SUFFIXES
             include)
 
-    find_library(MYSQLCONNECTORCPP_LIBRARY
+    find_library(MYSQLCONNECTORCPP_LIBRARY_DEBUG
             NAMES
             mysqlcppconn
             mysqlcppconn-static
             HINTS
             ${MYSQLCONNECTORCPP_ROOT_DIR}
             PATH_SUFFIXES
-            lib)
+            lib/debug)
+
+    find_library(MYSQLCONNECTORCPP_LIBRARY_RELEASE
+            NAMES
+            mysqlcppconn
+            mysqlcppconn-static
+            HINTS
+            ${MYSQLCONNECTORCPP_ROOT_DIR}
+            PATH_SUFFIXES
+            lib/opt)
 
 else()
     find_path(MYSQLCONNECTORCPP_INCLUDE_DIR
@@ -66,8 +79,18 @@ if(MYSQLCONNECTORCPP_FOUND)
     set(MYSQLCONNECTORCPP_INCLUDE_DIRS
             "${MYSQLCONNECTORCPP_INCLUDE_DIR}")
 # Add any dependencies here
-    set(MYSQLCONNECTORCPP_LIBRARIES
-            "${MYSQLCONNECTORCPP_LIBRARY}")
+    if (WIN32)
+        if (CMAKE_BUILD_TYPE EQUAL "RELEASE")
+            set(MYSQLCONNECTORCPP_LIBRARIES
+                    "${MYSQLCONNECTORCPP_LIBRARY_RELEASE}")
+        elseif()
+            set(MYSQLCONNECTORCPP_LIBRARIES
+                    "${MYSQLCONNECTORCPP_LIBRARY_DEBUG}")
+        endif()
+    elseif()
+            set(MYSQLCONNECTORCPP_LIBRARIES
+                    "${MYSQLCONNECTORCPP_LIBRARY}")
+    endif()
 # Add any dependencies here
     mark_as_advanced(MYSQLCONNECTORCPP_ROOT_DIR)
 endif() 
