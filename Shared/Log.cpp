@@ -3,7 +3,6 @@
 #include <iostream>
 #include <cstdarg>
 #include <cstdlib>
-#include "Shared/Utils.hpp"
 
 Log sLog;
 
