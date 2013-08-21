@@ -1,4 +1,5 @@
 #include "Shared/Database.hpp"
+#include "Shared/Utils.hpp"
 #include <fstream>
 #include <cstdarg>
 #include <sstream>
@@ -55,3 +56,34 @@ QueryResult Database::Query(const char* sql)
     PStatement.reset(Connection->prepareStatement(sql));
     return QueryResult(PStatement->executeQuery());
 }
+
+#ifdef _MSC_VER
+void Database::PExecute(std::string const& toFormat, ...)
+{
+	const char* c_str = toFormat.c_str();
+
+	va_list ap;
+	va_start(ap, c_str);
+
+	char* sql = Format(c_str, &ap);
+
+	Execute(sql);
+
+	delete[] sql;
+}
+
+QueryResult Database::PQuery(std::string const& toFormat, ...)
+{
+	const char* c_str = toFormat.c_str();
+
+	va_list ap;
+	va_start(ap, c_str);
+
+	char* bufSQL = Format(c_str, &ap);
+	QueryResult q = Query(bufSQL);
+	delete[] bufSQL;
+
+	return q;
+}
+
+#endif

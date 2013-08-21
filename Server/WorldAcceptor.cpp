@@ -15,7 +15,7 @@ void WorldAcceptor::HandleAccept(WorldSessionPtr Session, const boost::system::e
     if(!error)
         Session->Start();
     else
-        sLog.Write(LOG_ERROR, "Connection refused (%s)", error.message());
+		LogWrite(LOG_ERROR, "Connection refused (%s)", error.message());
 
     Accept();
 }

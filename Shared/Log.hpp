@@ -24,9 +24,7 @@ public:
     void Write(int Priority, std::string const& Format, Arg... Args);
 #else
 	// Shitty Windows, shitty type support. :)
-	void Write(int Priority, std::string const& Format, ...);
-private:
-	int CountArguments(std::string const& Format) const;
+	void Write(int Priority, std::string const& Format, int /*dummy*/, ...);
 #endif
     void Write(int Priority, std::string const& ToWrite);
     void Flush();
@@ -75,5 +73,11 @@ void Log::Write(int Priority, std::string const& String, Arg... Args)
 #endif
 
 extern Log sLog;
+
+#ifdef _MSC_VER
+#define LogWrite(x, y, ...) sLog.Write(x, y, 1, __VA_ARGS__)
+#else
+#define LogWrite(x, y, ...) sLog.Write(x, y, __VA_ARGS__)
+#endif
 
 #endif

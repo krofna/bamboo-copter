@@ -36,8 +36,6 @@ public:
 #else
 	void PExecute(std::string const& toFormat, ...);
 	QueryResult PQuery(std::string const& toFormat, ...);
-private:
-	int CountArguments(std::string const& toFormat) const;
 #endif
 
 private:

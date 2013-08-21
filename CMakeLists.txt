@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
-project(bamboo-copter CXX)
+project(bamboo-copter)
 
 set (CMAKE_DISABLE_IN_SOURCE_BUILD ON)
 set (CMAKE_DISABLE_SOURCE_CHANGES ON)

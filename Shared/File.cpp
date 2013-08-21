@@ -1,5 +1,7 @@
 #include "File.hpp"
 
+#include <string>
+
 File::File(std::string Path, std::ios::openmode mode) :
 Stream(Path, std::ios::binary | mode)
 {
@@ -17,7 +19,7 @@ File::operator bool() const
 
 template <> File& File::operator>> (std::string& Data)
 {
-    getline(Stream, Data, '\0');
+    std::getline(Stream, Data, '\0');
     return *this;
 }
 

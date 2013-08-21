@@ -38,14 +38,14 @@ void TCPSession::HandleReceive(const boost::system::error_code& Error)
 
     if (Error)
     {
-        sLog.Write(LOG_ERROR, "Failed to receive packet. TODO: Try Reconnect?");
+		LogWrite(LOG_ERROR, "Failed to receive packet. TODO: Try Reconnect?");
         return;
     }
 
     if (RecPckt.GetOpcode() >= MSG_COUNT)
-        sLog.Write(LOG_ERROR, "Received %u: Bad opcode!", RecPckt.GetOpcode());
+        LogWrite(LOG_ERROR, "Received %u: Bad opcode!", RecPckt.GetOpcode());
 
-    sLog.Write(LOG_INFO, "Received Packet: %s, size: %u", OpcodeTable[RecPckt.GetOpcode()].name, RecPckt.GetSizeWithoutHeader());
+    LogWrite(LOG_INFO, "Received Packet: %s, size: %u", OpcodeTable[RecPckt.GetOpcode()].name, RecPckt.GetSizeWithoutHeader());
 
     (((WorldSession*)this)->*OpcodeTable[RecPckt.GetOpcode()].Handler)();
     Start();
@@ -53,7 +53,7 @@ void TCPSession::HandleReceive(const boost::system::error_code& Error)
 
 void TCPSession::Send(Packet& Pckt)
 {
-    sLog.Write(LOG_INFO, "Sending Packet: %s, size: %u", OpcodeTable[Pckt.GetOpcode()].name, Pckt.GetSizeWithoutHeader());
+    LogWrite(LOG_INFO, "Sending Packet: %s, size: %u", OpcodeTable[Pckt.GetOpcode()].name, Pckt.GetSizeWithoutHeader());
 
     Pckt.UpdateSizeData();
     MessageQueue.push(Pckt);
@@ -65,9 +65,9 @@ void TCPSession::Send(Packet& Pckt)
 void TCPSession::HandleSend(const boost::system::error_code& Error)
 {
     if (!Error)
-        sLog.Write(LOG_INFO, "Packet sent successfully!");
+        LogWrite(LOG_INFO, "Packet sent successfully!");
     else
-        sLog.Write(LOG_ERROR, "Failed to send packet!");
+        LogWrite(LOG_ERROR, "Failed to send packet!");
 
     MessageQueue.pop();
     if (!MessageQueue.empty())
