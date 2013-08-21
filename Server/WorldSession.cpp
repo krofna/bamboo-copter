@@ -1,6 +1,7 @@
 #include "WorldSession.hpp"
 #include "Shared/Log.hpp"
-#include "Player.hpp"
+#include "PlayerHolder.hpp"
+#include "Map.hpp"
 
 WorldSession::WorldSession(io_service& io) :
 TCPSession(io)
@@ -21,4 +22,6 @@ void TCPSession::HandleLogin()
 {
     std::string Username;
     RecPckt >> Username;
+    if (Player* pPlayer = ObjectHolder<Player>::Find(Username))
+        pPlayer->GetMap()->AddPlayer(pPlayer);
 }

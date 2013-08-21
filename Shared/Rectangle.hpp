@@ -6,6 +6,10 @@
 template <class T>
 struct Rectangle : sf::Rect<T>
 {
+    Rectangle()
+    {
+    }
+
     Rectangle(sf::Vector2<T> NW, sf::Vector2<T> Size) : sf::Rect<T>(NW, Size)
     {
     }

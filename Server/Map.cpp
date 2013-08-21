@@ -1,5 +1,6 @@
 #include "Map.hpp"
 #include "Shared/Database.hpp"
+#include "PlayerHolder.hpp"
 
 Map::Map(std::string Name, uint64 GUID) :
 Name(Name),
@@ -18,21 +19,29 @@ void Map::LoadObjects()
     WorldObject* pObject;
     uint32 Entry, x, y;
     uint64 GUID;
+    std::string Name;
 
-    Result = sDatabase.PQuery("SELECT `guid`, `entry`, `x`, `y` FROM `players` WHERE map='%llu'", MapGUID);
+    Result = sDatabase.PQuery("SELECT `guid`, `entry`, `x`, `y`, `username` FROM `players` WHERE map='%llu'", MapGUID);
     while (Result->next())
     {
         GUID  = Result->getUInt64(1);
         Entry = Result->getUInt  (2);
         x     = Result->getUInt  (3);
         y     = Result->getUInt  (4);
-        pObject = new Player(GUID, Entry, x, y);
+        Name  = Result->getString(5);
+        pObject = new Player(GUID, Entry, Name);
+        pObject->Relocate(this, x, y);
         QuadTree::Insert(pObject);
+        ObjectHolder<Player>::Insert((Player*)pObject);
     }
 }
 
 void Map::AddPlayer(Player* pPlayer)
 {
+    // Send current state
+    QuadTree::Traverse(std::bind(&WorldObject::CreateForPlayer, std::placeholders::_1, pPlayer));
+
+    // Make sure player receives new updates
     OnlinePlayers.Insert(pPlayer);
 }
 
