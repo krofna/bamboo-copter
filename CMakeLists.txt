@@ -16,19 +16,40 @@ if (CMAKE_COMPILER_IS_GNUCXX)
     add_definitions(-Wall)
     add_definitions(-Werror)
     add_definitions(-Wvariadic-macros)
-    add_definitions(-lpthread)
+    set(CMAKE_CXX_FLAGS "-lpthread" ${CMAKE_CXX_FLAGS})
 elseif (MSVC)
+
     if (MSVC_VERSION LESS 1700)
-	message(FATAL_ERROR "The project requires C++11 features. "
-      "You need at least Visual Studio 11 (Microsoft Visual Studio 2012), "
-      "with Microsoft Visual C++ Compiler Nov 2012 CTP (v120_CTP_Nov2012).") 
+
+    	message(FATAL_ERROR "The project requires C++11 features. "
+          "You need at least Visual Studio 11 (Microsoft Visual Studio 2012), "
+          "with Microsoft Visual C++ Compiler Nov 2012 CTP (v120_CTP_Nov2012).") 
+
     elseif (MSVC_VERSION EQUAL 1700)
- 	message( "VC11: use Microsoft Visual Studio 2012 "
-      "with Microsoft Visual C++ Compiler Nov 2012 CTP (v120_CTP_Nov2012)" ) 
-	set(CMAKE_GENERATOR_TOOLSET "v120_CTP_Nov2012" CACHE STRING "Platform Toolset" FORCE) 
+
+     	message( "VC11: use Microsoft Visual Studio 2012 "
+          "with Microsoft Visual C++ Compiler Nov 2012 CTP (v120_CTP_Nov2012)" ) 
+    	set(CMAKE_GENERATOR_TOOLSET "v120_CTP_Nov2012" CACHE STRING "Platform Toolset" FORCE) 
+
     else()
     endif()
+
     SET(Boost_USE_STATIC_LIBS   ON)
+    set(Boost_USE_MULTITHREADED ON)
+    ADD_DEFINITIONS(-D_ALLOW_ITERATOR_DEBUG_LEVEL_MISMATCH)
+    
+    macro(get_WIN32_WINNT version)
+        if (WIN32 AND CMAKE_SYSTEM_VERSION)
+            set(ver ${CMAKE_SYSTEM_VERSION})
+            string(REPLACE "." "" ver ${ver})
+            string(REGEX REPLACE "([0-9])" "0\\1" ver ${ver})
+
+            set(${version} "0x${ver}")
+        endif()
+    endmacro()
+
+    get_WIN32_WINNT(ver)
+    add_definitions(-D_WIN32_WINNT=${ver})
 else ()
     message( FATAL_ERROR "Unsupported compiler. Feel free to provide a patch :)" )
 endif ()
