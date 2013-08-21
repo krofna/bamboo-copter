@@ -2,7 +2,7 @@
 #define LOG_HPP
 
 #include <fstream>
-#include <boost/thread/mutex.hpp>
+#include <mutex>
 #include <boost/utility.hpp>
 #include <boost/format.hpp>
 
@@ -32,7 +32,7 @@ public:
 private:
     std::ofstream File;
     int LogLevel;
-    boost::mutex LogMutex;
+    std::mutex LogMutex;
 };
 
 #ifndef _MSC_VER
@@ -66,9 +66,10 @@ void Log::Write(int Priority, std::string const& String, Arg... Args)
         return;
 
     std::string Formated = Format(String, Args...);
-    boost::mutex::scoped_lock lock(LogMutex);
+    LogMutex.lock();
     std::cout << Formated << '\n';
     File << Formated << '\n';
+    LogMutex.unlock();
 }
 #endif
 

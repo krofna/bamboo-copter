@@ -22,9 +22,10 @@ void Log::Write(int Priority, std::string const& ToWrite)
     if (Priority < LogLevel)
         return;
 
-    boost::mutex::scoped_lock lock(LogMutex);
+    LogMutex.lock();
     std::cout << ToWrite << '\n';
     File << ToWrite << '\n';
+    LogMutex.unlock();
 }
 
 #ifdef _MSC_VER
@@ -51,7 +52,8 @@ void Log::Write(int Priority, std::string const& ToWrite, int /*dummy*/, ...)
 
 void Log::Flush()
 {
-    boost::mutex::scoped_lock lock(LogMutex);
+    LogMutex.lock();
     std::cout << std::flush;
     File << std::flush;
+    LogMutex.unlock();
 }
