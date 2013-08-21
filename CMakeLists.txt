@@ -16,6 +16,7 @@ if (CMAKE_COMPILER_IS_GNUCXX)
     add_definitions(-Wall)
     add_definitions(-Werror)
     add_definitions(-Wvariadic-macros)
+    add_definitions(-lpthread)
 elseif (MSVC)
     if (MSVC_VERSION LESS 1700)
 	message(FATAL_ERROR "The project requires C++11 features. "
