@@ -66,14 +66,29 @@ else()
             lib)
 endif()
 
-    mark_as_advanced(MYSQLCONNECTORCPP_INCLUDE_DIR
-            MYSQLCONNECTORCPP_LIBRARY)
+    mark_as_advanced(MYSQLCONNECTORCPP_INCLUDE_DIR)
+
+if (WIN32)
+    mark_as_advanced(MYSQLCONNECTORCPP_LIBRARY_RELEASE MYSQLCONNECTORCPP_LIBRARY_DEBUG)
+else()
+    mark_as_advanced(MYSQLCONNECTORCPP_LIBRARY)
+endif()
 
 include(FindPackageHandleStandardArgs)
+
+if (WIN32)
+    find_package_handle_standard_args(MysqlConnectorCpp
+            DEFAULT_MSG
+            MYSQLCONNECTORCPP_INCLUDE_DIR
+            MYSQLCONNECTORCPP_LIBRARY_DEBUG 
+            MYSQLCONNECTORCPP_LIBRARY_RELEASE)
+else()
     find_package_handle_standard_args(MysqlConnectorCpp
             DEFAULT_MSG
             MYSQLCONNECTORCPP_INCLUDE_DIR
             MYSQLCONNECTORCPP_LIBRARY)
+endif()
+
 
 if(MYSQLCONNECTORCPP_FOUND)
     set(MYSQLCONNECTORCPP_INCLUDE_DIRS
