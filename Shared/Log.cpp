@@ -41,11 +41,19 @@ void Log::Write(int Priority, std::string const& ToWrite, int /*dummy*/, ...)
 
 	char* bufFormatted = Format(cstr, &ArgumentPointer);
 
-	boost::mutex::scoped_lock lock(LogMutex);
-	std::cout << bufFormatted << '\n';
-	File << bufFormatted << '\n';
-
-	delete[] bufFormatted;
+	try
+	{
+		LogMutex.lock();
+		std::cout << bufFormatted << '\n';
+		File << bufFormatted << '\n';
+		LogMutex.unlock();
+	}
+	catch (...)
+	{
+		LogMutex.unlock();
+		delete[] bufFormatted;
+		throw;
+	}
 }
 
 #endif

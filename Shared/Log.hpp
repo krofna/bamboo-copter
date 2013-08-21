@@ -78,7 +78,7 @@ extern Log sLog;
 #ifdef _MSC_VER
 #define LogWrite(x, y, ...) sLog.Write(x, y, 1, __VA_ARGS__)
 #else
-#define LogWrite(x, y, ...) sLog.Write(x, y, __VA_ARGS__)
+#define LogWrite(x, y, ...) sLog.Write(x, y, VA_ARGS)
 #endif
 
 #endif
