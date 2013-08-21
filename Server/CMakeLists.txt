@@ -25,8 +25,6 @@ ${SFML_INCLUDE_DIR}
 file(
 GLOB_RECURSE
 SHARED_SRC
-${CMAKE_SOURCE_DIR}/Shared/Utils.hpp
-${CMAKE_SOURCE_DIR}/Shared/Utils.cpp
 ${CMAKE_SOURCE_DIR}/Shared/Database.cpp
 ${CMAKE_SOURCE_DIR}/Shared/Log.cpp
 ${CMAKE_SOURCE_DIR}/Shared/Packet.cpp
