@@ -19,9 +19,15 @@ class Log : private boost::noncopyable
 public:
     void Initialize(const char* File);
     void SetPriority(int Priority);
-
+#ifndef _MSC_VER
     template <typename... Arg>
     void Write(int Priority, std::string const& Format, Arg... Args);
+#else
+	// Shitty Windows, shitty type support. :)
+	void Write(int Priority, std::string const& Format, ...);
+private:
+	int CountArguments(std::string const& Format) const;
+#endif
     void Write(int Priority, std::string const& ToWrite);
     void Flush();
 
@@ -30,6 +36,8 @@ private:
     int LogLevel;
     boost::mutex LogMutex;
 };
+
+#ifndef _MSC_VER
 
 inline std::string Format(boost::format formater)
 {
@@ -64,6 +72,7 @@ void Log::Write(int Priority, std::string const& String, Arg... Args)
     std::cout << Formated << '\n';
     File << Formated << '\n';
 }
+#endif
 
 extern Log sLog;
 
