@@ -6,7 +6,9 @@
 #include <boost/asio/io_service.hpp>
 #include <boost/asio/ip/address.hpp>
 
+class WorldSession;
 typedef boost::asio::ip::tcp::resolver TCPResolver;
+typedef boost::shared_ptr<WorldSession> WorldSessionPtr;
 
 class WorldSession : public TCPSession
 {
