@@ -16,12 +16,11 @@ if (CMAKE_COMPILER_IS_GNUCXX)
     add_definitions(-Wall)
     add_definitions(-Werror)
     add_definitions(-Wvariadic-macros)
-elseif (MSVC or MSVC_IDE)
+elseif (MSVC)
     if (MSVC_VERSION LESS 1700)
 	message(FATAL_ERROR "The project requires C++11 features. "
       "You need at least Visual Studio 11 (Microsoft Visual Studio 2012), "
       "with Microsoft Visual C++ Compiler Nov 2012 CTP (v120_CTP_Nov2012).") 
-    endif()
     elseif (MSVC_VERSION EQUAL 1700)
  	message( "VC11: use Microsoft Visual Studio 2012 "
       "with Microsoft Visual C++ Compiler Nov 2012 CTP (v120_CTP_Nov2012)" ) 
