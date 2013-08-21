@@ -27,7 +27,7 @@ void WorldSession::Connect(std::string IP, std::string Port)
 void WorldSession::OnConnect(const boost::system::error_code& Error)
 {
     if (Error)
-        LogWrite(LOG_ERROR, "Failed to connect.");
+        sLog.Write(LOG_ERROR, "Failed to connect.");
     else
         Start();
 }
@@ -55,6 +55,6 @@ void WorldSession::HandleObjectCreate()
 
 void WorldSession::HandleNULL()
 {
-    LogWrite(LOG_ERROR, "Received strange opcode: %s", OpcodeTable[RecPckt.GetOpcode()].name);
+    sLog.Write(LOG_ERROR, "Received strange opcode: %s", OpcodeTable[RecPckt.GetOpcode()].name);
 }
 
