@@ -12,7 +12,7 @@ link_directories(${SFML_LIBRARY_DIRS})
 
 include_directories(
 ${CMAKE_BINARY_DIR}
-${SFML_INCLUDE_DIRS}
+${SFML_INCLUDE_DIR}
 ${Boost_INCLUDE_DIRS}
 ${SFGUI_INCLUDE_DIRS}
 ${CMAKE_SOURCE_DIR}/Client/

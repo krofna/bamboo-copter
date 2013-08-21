@@ -26,17 +26,12 @@ public:
 
     QueryResult Query(const char* sql);
     void Execute(const char* sql);
-	
-#ifndef _MSC_VER
+
     template<typename... Values>
     void PExecute(std::string const& toFormat, Values... values);
 
     template<typename... Values>
     QueryResult PQuery(std::string const& toFormat, Values... values);
-#else
-	void PExecute(std::string const& toFormat, ...);
-	QueryResult PQuery(std::string const& toFormat, ...);
-#endif
 
 private:
     sql::Driver* Driver;
@@ -44,8 +39,6 @@ private:
     StatementPtr Statement;
     PStatementPtr PStatement;
 };
-
-#ifndef _MSC_VER
 
 inline std::string Format(boost::format& formater)
 {
@@ -81,7 +74,6 @@ QueryResult Database::PQuery(std::string const& sql, Values... values)
     return Query(Format(sql, values...).c_str());
 }
 
-#endif
 extern Database sDatabase;
 
 #endif

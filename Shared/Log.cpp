@@ -28,36 +28,6 @@ void Log::Write(int Priority, std::string const& ToWrite)
     LogMutex.unlock();
 }
 
-#ifdef _MSC_VER
-void Log::Write(int Priority, std::string const& ToWrite, int /*dummy*/, ...)
-{
-	if (Priority < LogLevel)
-		return;
-
-	const char* cstr = ToWrite.c_str();
-	va_list ArgumentPointer;
-
-	va_start(ArgumentPointer, cstr);
-
-	char* bufFormatted = Format(cstr, &ArgumentPointer);
-
-	try
-	{
-		LogMutex.lock();
-		std::cout << bufFormatted << '\n';
-		File << bufFormatted << '\n';
-		LogMutex.unlock();
-	}
-	catch (...)
-	{
-		LogMutex.unlock();
-		delete[] bufFormatted;
-		throw;
-	}
-}
-
-#endif
-
 void Log::Flush()
 {
     LogMutex.lock();

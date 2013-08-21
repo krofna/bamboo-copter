@@ -7,7 +7,7 @@
 #include "Shared/BasicTypes.hpp"
 
 
-class CAnimationTemplate;
+struct CAnimationTemplate;
 
 class WorldObject
 {
