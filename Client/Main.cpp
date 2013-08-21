@@ -15,9 +15,9 @@ void GenDummyTemplateFile()
     f.Close();
 }
 
-void StartNetworking(boost::asio::io_service& io)
+void StartNetworking(boost::asio::io_service& io, World* pWorld)
 {
-    WorldSessionPtr pSession = boost::make_shared<WorldSession>(io);
+    WorldSessionPtr pSession = boost::make_shared<WorldSession>(io, pWorld);
     pSession->Connect("127.0.0.1", "48879");
     boost::thread NetworkingThread(boost::bind(&boost::asio::io_service::run, &io));
     NetworkingThread.detach();
@@ -26,25 +26,14 @@ void StartNetworking(boost::asio::io_service& io)
 int main(int argc, char** argv)
 {
     boost::asio::io_service io;
-    StartNetworking(io);
-
     Packet Pckt(SMSG_TEMPLATE);
     Pckt << "test.tem" << uint8(ANIMATION_TEMPLATE);
     sDataMgr = new DataMgr;
     sDataMgr->ProcessPacket(Pckt);
     Game* pGame = new Game("beech-copter");
     World* pWorld = new World(pGame->GetWindow());
-    for (int i = 0; i < 32; ++i)
-    {
-        for (int j = 0; j < 32; ++j)
-        {
-            WorldObject* pObject = new WorldObject(1);
-            pObject->SetPosition(sf::Vector2f(TILE_SIZE * float(i), TILE_SIZE * float(j)));
-            pObject->SetAnimation(0);
-            pObject->SetAnimationSpeed(sf::milliseconds(300));
-            pWorld->Insert(pObject);
-        }
-    }
+
+    StartNetworking(io, pWorld);
     pGame->PushState(pWorld);
     pGame->Run();
 

@@ -1,4 +1,4 @@
-beech-copter
+bamboo-copter
 ============
 
 Future Gadget #2

@@ -21,9 +21,10 @@ void Log::Write(int Priority, std::string const& ToWrite)
     if (Priority < LogLevel)
         return;
 
-    boost::mutex::scoped_lock lock(LogMutex);
+    LogMutex.lock();
     std::cout << ToWrite << '\n';
     File << ToWrite << '\n';
+    LogMutex.unlock();
 }
 
 #ifdef _MSC_VER
@@ -53,9 +54,10 @@ void Log::Write(int Priority, std::string const& ToWrite, ...)
 		// We can suppose that all is okay, else.
 	}
 
-	boost::mutex::scoped_lock lock(LogMutex);
+	LogMutex.lock();
 	std::cout << bufFormated << '\n';
 	File << bufFormated << '\n';
+    LogMutex.unlock();
 }
 
 int Log::CountArguments(std::string const& FormatString) const
@@ -71,7 +73,8 @@ int Log::CountArguments(std::string const& FormatString) const
 
 void Log::Flush()
 {
-    boost::mutex::scoped_lock lock(LogMutex);
+    LogMutex.lock();
     std::cout << std::flush;
     File << std::flush;
+    LogMutex.unlock();
 }

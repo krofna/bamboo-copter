@@ -30,7 +30,7 @@ void WorldObject::Update()
 void WorldObject::CreateForPlayer(Player* pPlayer)
 {
     Packet Pckt(SMSG_OBJECT_CREATE);
-    Pckt << GUID << Entry << Rect.left << Rect.top << Rect.width << Rect.height;
+    Pckt << GUID << Entry << Rect.left << Rect.top;
     pPlayer->SendPacket(Pckt);
 }
 

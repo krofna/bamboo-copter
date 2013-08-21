@@ -2,7 +2,8 @@
 #include "DataMgr.hpp"
 #include "Shared/Defines.hpp"
 
-WorldObject::WorldObject(uint32 Entry)
+WorldObject::WorldObject(uint32 Entry) :
+CurrAnim(0)
 {
     pTemplate = sDataMgr->GetAnimationTemplate(Entry);
     Sprite.setTexture(*pTemplate->pTexture);
