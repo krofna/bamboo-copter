@@ -34,6 +34,19 @@ int main(int argc, char** argv)
     World* pWorld = new World(pGame->GetWindow());
 
     StartNetworking(io, pWorld);
+
+    for (int i = 0; i < 32; ++i)
+    {
+        for (int j = 0; j < 32; ++j)
+        {
+            WorldObject* pObject = new WorldObject(1);
+            pObject->SetPosition(sf::Vector2f(TILE_SIZE * float(i), TILE_SIZE * float(j)));
+            pObject->SetAnimation(0);
+            pObject->SetAnimationSpeed(sf::milliseconds(300));
+            pWorld->Insert(pObject);
+        }
+    }
+
     pGame->PushState(pWorld);
     pGame->Run();
 
