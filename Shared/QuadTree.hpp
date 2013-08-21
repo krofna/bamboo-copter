@@ -15,7 +15,7 @@ class QuadTree : private LinkedList<WorldObject>
 {
 public:
     QuadTree();
-    QuadTree(Rectangle<U> Area, QuadTree* pParent);
+    QuadTree(Rect<U> Area, QuadTree* pParent);
     ~QuadTree();
 
     bool Insert(WorldObject* pObject);
@@ -27,7 +27,7 @@ protected:
     void Traverse(T Func);
 
     template <class T>
-    void TraverseArea(Rectangle<U> Area, T Func);
+    void TraverseArea(Rect<U> Area, T Func);
 
     template <class T>
     void Foreach(T Func);
@@ -36,7 +36,7 @@ private:
     QuadTree* Locate(WorldObject* pObject);
 
     uint8 Size;
-    Rectangle<U> Area;
+    Rect<U> Area;
 
     QuadTree* pParent;
     QuadTree* NW;

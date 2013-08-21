@@ -14,7 +14,7 @@ void QuadTree<U>::Traverse(T Func)
 }
 
 template <class U> template <class T>
-void QuadTree<U>::TraverseArea(Rectangle<U> Area, T Func)
+void QuadTree<U>::TraverseArea(Rect<U> Area, T Func)
 {
     if (pParent)
     {
@@ -35,12 +35,12 @@ void QuadTree<U>::TraverseArea(Rectangle<U> Area, T Func)
 
 template <class U>
 QuadTree<U>::QuadTree() :
-QuadTree(Rectangle<U>(sf::Vector2<U>(0, 0), sf::Vector2<U>(std::numeric_limits<uint32>::max(), std::numeric_limits<uint32>::max())), nullptr)
+QuadTree(Rect<U>(sf::Vector2<U>(0, 0), sf::Vector2<U>(std::numeric_limits<uint32>::max(), std::numeric_limits<uint32>::max())), nullptr)
 {
 }
 
 template <class U>
-QuadTree<U>::QuadTree(Rectangle<U> Area, QuadTree* pParent) :
+QuadTree<U>::QuadTree(Rect<U> Area, QuadTree* pParent) :
 Size(0),
 Area(Area),
 pParent(pParent),
@@ -75,10 +75,10 @@ bool QuadTree<U>::Insert(WorldObject* pObject)
 
     if (!NW)
     {
-        this->NW = new QuadTree(Rectangle<U>(Area.NW(), Area.Size() / static_cast<U>(2)), this);
-        this->NE = new QuadTree(Rectangle<U>(Area.NW() + sf::Vector2<U>(Area.Size().x / static_cast<U>(2), static_cast<U>(0)), Area.Size() / static_cast<U>(2)), this);
-        this->SW = new QuadTree(Rectangle<U>(Area.NW() + sf::Vector2<U>(static_cast<U>(0), Area.Size().y / static_cast<U>(2)), Area.Size() / static_cast<U>(2)), this);
-        this->SE = new QuadTree(Rectangle<U>(Area.Size() / static_cast<U>(2), Area.Size() / static_cast<U>(2)), this);
+        this->NW = new QuadTree(Rect<U>(Area.NW(), Area.Size() / static_cast<U>(2)), this);
+        this->NE = new QuadTree(Rect<U>(Area.NW() + sf::Vector2<U>(Area.Size().x / static_cast<U>(2), static_cast<U>(0)), Area.Size() / static_cast<U>(2)), this);
+        this->SW = new QuadTree(Rect<U>(Area.NW() + sf::Vector2<U>(static_cast<U>(0), Area.Size().y / static_cast<U>(2)), Area.Size() / static_cast<U>(2)), this);
+        this->SE = new QuadTree(Rect<U>(Area.Size() / static_cast<U>(2), Area.Size() / static_cast<U>(2)), this);
     }
 
     if (this->NW->Insert(pObject)) return true;

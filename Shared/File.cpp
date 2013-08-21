@@ -17,13 +17,13 @@ File::operator bool() const
     return !Stream.eof() && Stream.good();
 }
 
-template <> File& File::operator>> (std::string& Data)
+template <> inline File& File::operator>> (std::string& Data)
 {
     std::getline(Stream, Data, '\0');
     return *this;
 }
 
-template <> File& File::operator<< (std::string Data)
+template <> inline File& File::operator<< (std::string Data)
 {
     char null = 0;
     Stream.write(Data.c_str(), Data.size());

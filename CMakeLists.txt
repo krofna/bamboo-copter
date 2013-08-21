@@ -36,7 +36,8 @@ elseif (MSVC)
 
     SET(Boost_USE_STATIC_LIBS   ON)
     set(Boost_USE_MULTITHREADED ON)
-    ADD_DEFINITIONS(-D_ALLOW_ITERATOR_DEBUG_LEVEL_MISMATCH)
+    add_definitions(-D_ALLOW_ITERATOR_DEBUG_LEVEL_MISMATCH)
+    add_definitions(-D BOOST_THREAD_NO_LIB)
     
     macro(get_WIN32_WINNT version)
         if (WIN32 AND CMAKE_SYSTEM_VERSION)

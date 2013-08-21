@@ -11,6 +11,7 @@ class WorldObject;
 class DataMgr
 {
 public:
+	DataMgr();
     ~DataMgr();
 
     void ProcessPacket(Packet& Pckt);

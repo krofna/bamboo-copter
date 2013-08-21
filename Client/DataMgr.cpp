@@ -2,9 +2,13 @@
 #include "WorldObject.hpp"
 #include <SFML/Graphics/Texture.hpp>
 #include "Shared/Defines.hpp"
-#include "Shared/File.hpp"
 
 DataMgr* sDataMgr;
+
+DataMgr::DataMgr()
+{
+
+}
 
 DataMgr::~DataMgr()
 {

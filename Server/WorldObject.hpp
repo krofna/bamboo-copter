@@ -13,7 +13,7 @@ public:
     WorldObject(uint64 GUID, uint32 Entry);
 
     uint64 GetGUID() const;
-    Rectangle<uint32> GetRect() const;
+    Rect<uint32> GetRect() const;
     virtual void Update();
     void CreateForPlayer(Player* pPlayer);
     Map* GetMap() const;
@@ -24,7 +24,7 @@ private:
     uint64 GUID;
     uint32 Entry;
     Map* pMap;
-    Rectangle<uint32> Rect;
+    Rect<uint32> Rectg;
 };
 
 #endif

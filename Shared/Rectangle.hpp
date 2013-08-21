@@ -4,17 +4,17 @@
 #include <SFML/Graphics/Rect.hpp>
 
 template <class T>
-struct Rectangle : sf::Rect<T>
+struct Rect : sf::Rect<T>
 {
-    Rectangle()
+    Rect()
     {
     }
 
-    Rectangle(sf::Vector2<T> NW, sf::Vector2<T> Size) : sf::Rect<T>(NW, Size)
+    Rect(sf::Vector2<T> NW, sf::Vector2<T> Size) : sf::Rect<T>(NW, Size)
     {
     }
 
-    Rectangle(const sf::Rect<T>& Rect) : sf::Rect<T>(Rect)
+    Rect(const sf::Rect<T>& Rect) : sf::Rect<T>(Rect)
     {
     }
 

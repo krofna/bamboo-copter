@@ -10,9 +10,9 @@ CurrAnim(0)
     this->Size = sf::Vector2f(pTemplate->Size);
 }
 
-Rectangle<float> WorldObject::GetRect() const
+Rect<float> WorldObject::GetRect() const
 {
-    return Rectangle<float>(Sprite.getPosition(), Size);
+    return Rect<float>(Sprite.getPosition(), Size);
 }
 
 void WorldObject::Draw(sf::RenderWindow& Window)

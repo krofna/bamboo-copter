@@ -8,9 +8,9 @@ Entry(Entry)
 {
 }
 
-Rectangle<uint32> WorldObject::GetRect() const
+Rect<uint32> WorldObject::GetRect() const
 {
-    return Rect;
+    return Rectg;
 }
 
 uint64 WorldObject::GetGUID() const
@@ -30,7 +30,7 @@ void WorldObject::Update()
 void WorldObject::CreateForPlayer(Player* pPlayer)
 {
     Packet Pckt(SMSG_OBJECT_CREATE);
-    Pckt << GUID << Entry << Rect.left << Rect.top;
+    Pckt << GUID << Entry << Rectg.left << Rectg.top;
     pPlayer->SendPacket(Pckt);
 }
 
@@ -43,6 +43,6 @@ void WorldObject::Relocate(Map* pMap, uint32 x, uint32 y)
 
 void WorldObject::Relocate(uint32 x, uint32 y)
 {
-    Rect.left = x;
-    Rect.top = y;
+    Rectg.left = x;
+    Rectg.top = y;
 }
