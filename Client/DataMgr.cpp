@@ -41,6 +41,7 @@ void DataMgr::ProcessAnimationTemplateFile(File& DataFile)
     uint8 NumAnims;
     uint8 NumFrames;
     uint8 x, y;
+    uint16 sx, sy;
 
     while (true)
     {
@@ -49,6 +50,8 @@ void DataMgr::ProcessAnimationTemplateFile(File& DataFile)
         DataFile >> Texture;
         Template.pTexture = new sf::Texture;
         Template.pTexture->loadFromFile(Texture);
+        DataFile >> sx >> sy;
+        Template.Size = sf::Vector2<uint16>(sx, sy);
         DataFile >> NumAnims;
         Template.FramesPerAnim.resize(NumAnims);
         Template.TexPos.resize(NumAnims);

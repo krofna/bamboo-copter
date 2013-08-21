@@ -21,13 +21,7 @@ struct CAnimationTemplate
     sf::Texture* pTexture;
     std::vector<std::vector<sf::Vector2<uint16>>> TexPos;
     std::vector<uint8> FramesPerAnim;
-    uint32 Entry;
-};
-
-struct SAnimationTemplate
-{
-    std::string Texture;
-    char* Data;
+    sf::Vector2<uint16> Size;
     uint32 Entry;
 };
 

@@ -1,12 +1,14 @@
 #include "Shared/Game.hpp"
 #include "DataMgr.hpp"
 #include "Shared/World.hpp"
+#include <boost/asio/io_service.hpp>
 #include "Shared/Opcodes.hpp"
 
 int main(int argc, char** argv)
 {
+    boost::asio::io_service io;
     File f("test.tem", std::ios::out);
-    f << uint32(1) << std::string("test.png") << uint8(1) << uint8(2) << uint8(0) << uint8(0) << uint8(1) << uint8(0);
+    f << uint32(1) << std::string("test.png") << uint16(TILE_SIZE) << uint16(TILE_SIZE) << uint8(1) << uint8(2) << uint8(0) << uint8(0) << uint8(1) << uint8(0);
     f.Close();
     Packet Pckt(SMSG_TEMPLATE);
     Pckt << "test.tem" << uint8(ANIMATION_TEMPLATE);
@@ -22,7 +24,6 @@ int main(int argc, char** argv)
             pObject->SetPosition(sf::Vector2f(TILE_SIZE * float(i), TILE_SIZE * float(j)));
             pObject->SetAnimation(0);
             pObject->SetAnimationSpeed(sf::milliseconds(300));
-            pObject->SetSize(sf::Vector2f(TILE_SIZE, TILE_SIZE));
             pWorld->Insert(pObject);
         }
     }

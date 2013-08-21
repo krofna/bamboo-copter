@@ -6,6 +6,7 @@ WorldObject::WorldObject(uint32 Entry)
 {
     pTemplate = sDataMgr->GetAnimationTemplate(Entry);
     Sprite.setTexture(*pTemplate->pTexture);
+    this->Size = sf::Vector2f(pTemplate->Size);
 }
 
 Rectangle<float> WorldObject::GetRect() const
