@@ -1,6 +1,7 @@
 #include "Map.hpp"
 #include "Shared/Database.hpp"
 #include "PlayerHolder.hpp"
+#include "Creature.hpp"
 
 Map::Map(std::string Name, uint64 GUID) :
 Name(Name),
@@ -33,6 +34,19 @@ void Map::LoadObjects()
         pObject->Relocate(this, x, y);
         QuadTree::Insert(pObject);
         ObjectHolder<Player>::Insert((Player*)pObject);
+    }
+
+    Result = sDatabase.PQuery("SELECT `guid`, `entry`, `x`, `y`, FROM `creature` WHERE map='%llu'", MapGUID);
+    while (Result->next())
+    {
+        GUID  = Result->getUInt64(1);
+        Entry = Result->getUInt  (2);
+        x     = Result->getUInt  (3);
+        y     = Result->getUInt  (4);
+        pObject = new Creature(GUID, Entry);
+        pObject->Relocate(this, x, y);
+        QuadTree::Insert(pObject);
+        ObjectHolder<Creature>::Insert((Creature*)pObject);
     }
 }
 

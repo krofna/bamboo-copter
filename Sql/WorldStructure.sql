@@ -12,6 +12,17 @@ CREATE TABLE `players`
     PRIMARY KEY(guid)
 );
 
+DROP TABLE IF EXISTS `creature`;
+CREATE TABLE `creature` 
+(
+    `guid` BIGINT UNSIGNED NOT NULL,
+    `entry` INT UNSIGNED NOT NULL,
+    `x` INT UNSIGNED NOT NULL,
+    `y` INT UNSIGNED NOT NULL,
+    `map` INT UNSIGNED NOT NULL,
+    PRIMARY KEY(guid)
+);
+
 DROP TABLE IF EXISTS `maps`;
 CREATE TABLE `maps` 
 (
