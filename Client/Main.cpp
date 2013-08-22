@@ -1,8 +1,7 @@
 #include "Shared/Game.hpp"
-#include "DataMgr.hpp"
+#include "Shared/DataMgr.hpp"
 #include "Shared/World.hpp"
 #include "WorldSession.hpp"
-#include "Shared/Opcodes.hpp"
 #include "Shared/Log.hpp"
 
 #include <boost/asio/io_service.hpp>
@@ -12,7 +11,7 @@
 void GenDummyTemplateFile()
 {
     File f("test.tem", std::ios::out);
-    f << uint32(1) << std::string("test.png") << uint16(TILE_SIZE) << uint16(TILE_SIZE) << uint8(1) << uint8(2) << uint8(0) << uint8(0) << uint8(1) << uint8(0);
+    f << uint32(0) << std::string("test.png") << uint16(TILE_SIZE) << uint16(TILE_SIZE) << uint8(1) << uint8(2) << uint8(0) << uint8(0) << uint8(1) << uint8(0);
     f.Close();
 }
 
@@ -28,26 +27,13 @@ int main(int argc, char** argv)
 {
     boost::asio::io_service io;
     sLog.SetPriority(LOG_INFO);
-    Packet Pckt(SMSG_TEMPLATE);
-    Pckt << "test.tem" << uint8(ANIMATION_TEMPLATE);
+
     sDataMgr = new DataMgr;
-    sDataMgr->ProcessPacket(Pckt);
+    sDataMgr->LoadFile("../Shared/test.tem");
     Game* pGame = new Game("beech-copter");
     World* pWorld = new World(pGame->GetWindow());
 
     StartNetworking(io, pWorld);
-
-    for (int i = 0; i < 32; ++i)
-    {
-        for (int j = 0; j < 32; ++j)
-        {
-            WorldObject* pObject = new WorldObject(1);
-            pObject->SetPosition(sf::Vector2f(TILE_SIZE * float(i), TILE_SIZE * float(j)));
-            pObject->SetAnimation(0);
-            pObject->SetAnimationSpeed(sf::milliseconds(300));
-            pWorld->Insert(pObject);
-        }
-    }
 
     pGame->PushState(pWorld);
     pGame->Run();

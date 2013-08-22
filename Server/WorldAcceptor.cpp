@@ -13,7 +13,10 @@ Acceptor(io, Endpoint)
 void WorldAcceptor::HandleAccept(WorldSessionPtr Session, const boost::system::error_code& error)
 {
     if (!error)
+    {
+        sLog.Write(LOG_INFO, "Connection established");
         Session->Start();
+    }
     else
 		sLog.Write(LOG_ERROR, "Connection refused (%s)", error.message());
 

@@ -1,7 +1,10 @@
 #include "DataMgr.hpp"
 #include "WorldObject.hpp"
-#include <SFML/Graphics/Texture.hpp>
 #include "Shared/Defines.hpp"
+
+#ifdef CLIENT
+#include <SFML/Graphics/Texture.hpp>
+#endif
 
 DataMgr* sDataMgr;
 
@@ -14,19 +17,10 @@ DataMgr::~DataMgr()
 {
 }
 
-void DataMgr::ProcessPacket(Packet& Pckt)
+void DataMgr::LoadFile(std::string FileName)
 {
-    std::string Path;
-    uint8 Type;
-
-    Pckt >> Path >> Type;
-    File DataFile(Path, std::ios::in);
-    switch (Type)
-    {
-        case NULL_TEMPLATE: assert(false);
-        case ANIMATION_TEMPLATE: ProcessAnimationTemplateFile(DataFile); break;
-        default: assert(false);
-    }
+    File DataFile(FileName, std::ios::in);
+    ProcessAnimationTemplateFile(DataFile);
 }
 
 CAnimationTemplate* DataMgr::GetAnimationTemplate(uint32 Entry)
@@ -52,8 +46,10 @@ void DataMgr::ProcessAnimationTemplateFile(File& DataFile)
         DataFile >> Entry;
         if (!DataFile) break;
         DataFile >> Texture;
+#ifdef CLIENT
         Template.pTexture = new sf::Texture;
         Template.pTexture->loadFromFile(Texture);
+#endif
         DataFile >> sx >> sy;
         Template.Size = sf::Vector2<uint16>(sx, sy);
         DataFile >> NumAnims;

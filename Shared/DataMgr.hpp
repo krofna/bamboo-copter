@@ -14,7 +14,7 @@ public:
 	DataMgr();
     ~DataMgr();
 
-    void ProcessPacket(Packet& Pckt);
+    void LoadFile(std::string FileName);
     CAnimationTemplate* GetAnimationTemplate(uint32 Entry);
 
 private:

@@ -28,6 +28,7 @@ ${CMAKE_SOURCE_DIR}/Shared/TCPSession.cpp
 ${CMAKE_SOURCE_DIR}/Shared/World.cpp
 ${CMAKE_SOURCE_DIR}/Shared/File.cpp
 ${CMAKE_SOURCE_DIR}/Shared/Game.cpp
+${CMAKE_SOURCE_DIR}/Shared/DataMgr.cpp
 )
 
 file(
@@ -50,3 +51,5 @@ add_executable(Client
     ${SHARED_SRC})
 target_link_libraries(Client
     ${CLIENT_LIBS})
+
+set_target_properties (Client PROPERTIES COMPILE_DEFINITIONS "CLIENT")

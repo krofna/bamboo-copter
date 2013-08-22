@@ -29,6 +29,8 @@ ${CMAKE_SOURCE_DIR}/Shared/Database.cpp
 ${CMAKE_SOURCE_DIR}/Shared/Log.cpp
 ${CMAKE_SOURCE_DIR}/Shared/Packet.cpp
 ${CMAKE_SOURCE_DIR}/Shared/TCPSession.cpp
+${CMAKE_SOURCE_DIR}/Shared/DataMgr.cpp
+${CMAKE_SOURCE_DIR}/Shared/File.cpp
 )
 file(
 GLOB_RECURSE
@@ -49,3 +51,5 @@ add_executable(Server
     ${SHARED_SRC})
 target_link_libraries(Server
     ${SERVER_LIBS})
+
+set_target_properties (Server PROPERTIES COMPILE_DEFINITIONS "SERVER")

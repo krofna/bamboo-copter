@@ -1,6 +1,5 @@
 #include "WorldSession.hpp"
 #include "Shared/Log.hpp"
-#include "DataMgr.hpp"
 #include "Shared/Opcodes.hpp"
 #include "WorldObject.hpp"
 #include "Shared/World.hpp"
@@ -29,7 +28,10 @@ void WorldSession::OnConnect(const boost::system::error_code& Error)
     if (Error)
         sLog.Write(LOG_ERROR, "Failed to connect: %s", Error.message());
     else
+    {
+        Login("test"); // Placeholder
         Start();
+    }
 }
 
 void WorldSession::Login(std::string Username)
@@ -41,7 +43,6 @@ void WorldSession::Login(std::string Username)
 
 void WorldSession::HandleTemplate()
 {
-    sDataMgr->ProcessPacket(RecPckt);
 }
 
 void WorldSession::HandleLogin()

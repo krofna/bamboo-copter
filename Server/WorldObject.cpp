@@ -1,11 +1,15 @@
 #include "WorldObject.hpp"
 #include "Player.hpp"
 #include "Shared/Opcodes.hpp"
+#include "Shared/DataMgr.hpp"
 
 WorldObject::WorldObject(uint64 GUID, uint32 Entry) :
 GUID(GUID),
 Entry(Entry)
 {
+    CAnimationTemplate* pTemplate = sDataMgr->GetAnimationTemplate(Entry);
+    Rectg.width = pTemplate->Size.x;
+    Rectg.height = pTemplate->Size.y;
 }
 
 Rect<uint32> WorldObject::GetRect() const

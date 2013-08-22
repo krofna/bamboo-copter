@@ -10,7 +10,6 @@ int main(int argc, char** argv)
     World* pWorld = new World(io);
     pAcceptor->Accept();
     pWorld->Load();
-    pWorld->Run();
     io.run();
 
     delete pWorld;
