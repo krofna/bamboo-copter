@@ -17,13 +17,21 @@ File::operator bool() const
     return !Stream.eof() && Stream.good();
 }
 
-template <> inline File& File::operator>> (std::string& Data)
+template <>
+#ifdef _MSC_VER
+inline
+#endif
+File& File::operator>> (std::string& Data)
 {
     std::getline(Stream, Data, '\0');
     return *this;
 }
 
-template <> inline File& File::operator<< (std::string Data)
+template <>
+#ifdef _MSC_VER
+inline
+#endif
+File& File::operator<< (std::string Data)
 {
     char null = 0;
     Stream.write(Data.c_str(), Data.size());
