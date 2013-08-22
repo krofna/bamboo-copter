@@ -9,6 +9,7 @@ int main(int argc, char** argv)
     boost::shared_ptr<WorldAcceptor> pAcceptor = boost::make_shared<WorldAcceptor>(io);
     World* pWorld = new World(io);
     pAcceptor->Accept();
+    pWorld->Load();
     pWorld->Run();
     io.run();
 

@@ -13,6 +13,7 @@ io(io)
 
 void World::Load()
 {
+    sDatabase.Connect();
     QueryResult Result(sDatabase.PQuery("SELECT `name`, `guid` FROM `maps`"));
     std::string MapName;
     uint64 MapGUID;
