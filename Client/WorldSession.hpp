@@ -22,6 +22,7 @@ public:
     void HandleLogin();
     void HandleObjectCreate();
 
+    void Login(std::string Username);
     void Connect(std::string IP, std::string Port);
 
 private:

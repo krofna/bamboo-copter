@@ -3,6 +3,7 @@
 #include "Shared/World.hpp"
 #include "WorldSession.hpp"
 #include "Shared/Opcodes.hpp"
+#include "Shared/Log.hpp"
 
 #include <boost/asio/io_service.hpp>
 #include <boost/make_shared.hpp>
@@ -26,6 +27,7 @@ void StartNetworking(boost::asio::io_service& io, World* pWorld)
 int main(int argc, char** argv)
 {
     boost::asio::io_service io;
+    sLog.SetPriority(LOG_INFO);
     Packet Pckt(SMSG_TEMPLATE);
     Pckt << "test.tem" << uint8(ANIMATION_TEMPLATE);
     sDataMgr = new DataMgr;

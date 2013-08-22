@@ -21,15 +21,22 @@ WorldSession::~WorldSession()
 void WorldSession::Connect(std::string IP, std::string Port)
 {
     async_connect(Socket, Resolver.resolve(TCPResolver::query(IP, Port)),
-        boost::bind(&WorldSession::OnConnect, this, placeholders::error));
+        boost::bind(&WorldSession::OnConnect, boost::static_pointer_cast<WorldSession>(shared_from_this()), placeholders::error));
 }
 
 void WorldSession::OnConnect(const boost::system::error_code& Error)
 {
     if (Error)
-        sLog.Write(LOG_ERROR, "Failed to connect.");
+        sLog.Write(LOG_ERROR, "Failed to connect: %s", Error.message());
     else
         Start();
+}
+
+void WorldSession::Login(std::string Username)
+{
+    Packet Pckt(MSG_LOGIN);
+    Pckt << Username;
+    Send(Pckt);
 }
 
 void WorldSession::HandleTemplate()
@@ -39,6 +46,7 @@ void WorldSession::HandleTemplate()
 
 void WorldSession::HandleLogin()
 {
+    sLog.Write(LOG_INFO, "Server accepted login");
 }
 
 void WorldSession::HandleObjectCreate()
