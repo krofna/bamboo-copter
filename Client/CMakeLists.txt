@@ -29,6 +29,7 @@ ${CMAKE_SOURCE_DIR}/Shared/World.cpp
 ${CMAKE_SOURCE_DIR}/Shared/File.cpp
 ${CMAKE_SOURCE_DIR}/Shared/Game.cpp
 ${CMAKE_SOURCE_DIR}/Shared/DataMgr.cpp
+${CMAKE_SOURCE_DIR}/Shared/ObjectHolder.cpp
 )
 
 file(

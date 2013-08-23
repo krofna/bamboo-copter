@@ -1,2 +1,3 @@
-INSERT INTO `maps` VALUES (0, 'test.map');
+INSERT INTO `maps` VALUES (0, 'test.map', 1024, 1024);
 INSERT INTO `players` VALUES (0, 0, 'test', 'test', 'none', 0, 0, 0);
+INSERT INTO `creature` VALUES (1, 0, 5, 5, 0);

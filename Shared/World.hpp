@@ -3,9 +3,11 @@
 
 #include "Shared/QuadTree.hpp"
 #include "Shared/GameState.hpp"
+#include "WorldObject.hpp"
 #include <mutex>
 
-class World : private QuadTree<float>, public GameState
+/* TODO: Terrain should be sf::VertexArray instead of stored in QuadTree along with other objects */
+class World : private QuadTree<WorldObject, float>, public GameState
 {
 public:
     World(sf::RenderWindow& Window);

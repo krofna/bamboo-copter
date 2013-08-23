@@ -12,7 +12,7 @@ struct CAnimationTemplate;
 class WorldObject
 {
 public:
-    WorldObject(uint32 Entry);
+    WorldObject(uint32 Entry, uint64 GUID);
 
     Rect<float> GetRect() const;
     void Draw(sf::RenderWindow& Window);
@@ -22,6 +22,8 @@ public:
     void SetAnimation(uint8 NewAnim);
     void SetAnimationSpeed(sf::Time Speed);
     void SetSize(sf::Vector2f Size);
+    void Move(uint16 x, uint16 y);
+    uint64 GetGUID() const;
 
 private:
     // Move some to Animation?
@@ -31,6 +33,7 @@ private:
     sf::Vector2f Size; // Sprite.getLocalBounds??
     sf::Time Speed, Elapsed;
     CAnimationTemplate* pTemplate;
+    uint64 GUID;
 };
 
 #endif

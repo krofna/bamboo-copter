@@ -21,6 +21,10 @@ void WorldSession::HandleLogin()
     }
 }
 
+void WorldSession::HandleMove()
+{
+}
+
 void WorldSession::HandleNULL()
 {
     sLog.Write(LOG_ERROR, "Received strange opcode: %s", OpcodeTable[RecPckt.GetOpcode()].name);

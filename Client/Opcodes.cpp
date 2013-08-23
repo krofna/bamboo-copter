@@ -6,5 +6,6 @@ OpcodeHandler OpcodeTable[MSG_COUNT] =
     { "MSG_NULL", &WorldSession::HandleNULL },
     { "SMSG_TEMPLATE", &WorldSession::HandleTemplate },
     { "MSG_LOGIN", &WorldSession::HandleLogin },
-    { "SMSG_OBJECT_CREATE", &WorldSession::HandleObjectCreate }
+    { "SMSG_OBJECT_CREATE", &WorldSession::HandleObjectCreate },
+    { "MSG_MOVE", &WorldSession::HandleMove }
 };

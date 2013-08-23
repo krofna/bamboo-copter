@@ -12,7 +12,7 @@ Entry(Entry)
     Rectg.height = pTemplate->Size.y;
 }
 
-Rect<uint32> WorldObject::GetRect() const
+Rect<uint16> Object::GetRect() const
 {
     return Rectg;
 }
@@ -39,14 +39,19 @@ void WorldObject::CreateForPlayer(Player* pPlayer)
 }
 
 
-void WorldObject::Relocate(Map* pMap, uint32 x, uint32 y)
+void WorldObject::Relocate(Map* pMap, uint16 x, uint16 y)
 {
     this->pMap = pMap;
     Relocate(x, y);
 }
 
-void WorldObject::Relocate(uint32 x, uint32 y)
+void WorldObject::Relocate(uint16 x, uint16 y)
 {
     Rectg.left = x;
     Rectg.top = y;
+}
+
+void Terrain::ResetPathfinderNode()
+{
+    Node::Reset();
 }

@@ -1,8 +1,8 @@
-template <class U> template <class T>
-void QuadTree<U>::Traverse(T Func)
+template <class W, class U> template <class T>
+void QuadTree<W, U>::Traverse(T Func)
 {
     if (pParent)
-        LinkedList::Foreach(Func);
+        LinkedList<W>::Foreach(Func);
 
     if (!NW)
         return;
@@ -13,15 +13,15 @@ void QuadTree<U>::Traverse(T Func)
     SE->Traverse(Func);
 }
 
-template <class U> template <class T>
-void QuadTree<U>::TraverseArea(Rect<U> Area, T Func)
+template <class W, class U> template <class T>
+void QuadTree<W, U>::TraverseArea(Rect<U> Area, T Func)
 {
     if (pParent)
     {
         if (!this->Area.intersects(Area))
             return;
 
-        LinkedList::Foreach(Func);
+        LinkedList<W>::Foreach(Func);
     }
 
     if (!NW)
@@ -33,14 +33,14 @@ void QuadTree<U>::TraverseArea(Rect<U> Area, T Func)
     SE->TraverseArea(Area, Func);
 }
 
-template <class U>
-QuadTree<U>::QuadTree() :
+template <class W, class U>
+QuadTree<W, U>::QuadTree() :
 QuadTree(Rect<U>(sf::Vector2<U>(0, 0), sf::Vector2<U>(std::numeric_limits<uint32>::max(), std::numeric_limits<uint32>::max())), nullptr)
 {
 }
 
-template <class U>
-QuadTree<U>::QuadTree(Rect<U> Area, QuadTree* pParent) :
+template <class W, class U>
+QuadTree<W, U>::QuadTree(Rect<U> Area, QuadTree* pParent) :
 Size(0),
 Area(Area),
 pParent(pParent),
@@ -51,14 +51,14 @@ SE(nullptr)
 {
 }
 
-template <class U>
-QuadTree<U>::~QuadTree()
+template <class W, class U>
+QuadTree<W, U>::~QuadTree()
 {
-    Traverse(std::default_delete<WorldObject>());
+    Traverse(std::default_delete<W>());
 }
 
-template <class U>
-bool QuadTree<U>::Insert(WorldObject* pObject)
+template <class W, class U>
+bool QuadTree<W, U>::Insert(W* pObject)
 {
     if (pParent)
     {
@@ -67,7 +67,7 @@ bool QuadTree<U>::Insert(WorldObject* pObject)
 
         if (this->Size < MAX_QUAD_CAPACITY)
         {
-            LinkedList::Insert(pObject);
+            LinkedList<W>::Insert(pObject);
             ++Size;
             return true;
         }
@@ -89,12 +89,12 @@ bool QuadTree<U>::Insert(WorldObject* pObject)
     return false;
 }
 
-template <class U>
-void QuadTree<U>::Remove(WorldObject* pObject)
+template <class W, class U>
+void QuadTree<W, U>::Remove(W* pObject)
 {
     QuadTree* pTree = Locate(pObject);
 
-    for (LinkedList* pIter = pTree; pIter != nullptr; pIter = pIter->Next())
+    for (LinkedList<W>* pIter = pTree; pIter != nullptr; pIter = pIter->Next())
     {
         if (pIter->Data() == pObject)
         {
@@ -105,8 +105,8 @@ void QuadTree<U>::Remove(WorldObject* pObject)
     }
 }
 
-template <class U>
-QuadTree<U>* QuadTree<U>::Locate(WorldObject* pObject)
+template <class W, class U>
+QuadTree<W, U>* QuadTree<W, U>::Locate(W* pObject)
 {
     QuadTree* pTree;
 
@@ -115,7 +115,7 @@ QuadTree<U>* QuadTree<U>::Locate(WorldObject* pObject)
         if (!Area.intersects(pObject->GetRect()))
             return nullptr;
 
-        for (LinkedList* pIter = this; pIter != nullptr; pIter = pIter->Next())
+        for (LinkedList<W>* pIter = this; pIter != nullptr; pIter = pIter->Next())
             if (pIter->Data() == pObject)
                 return this;
     }
@@ -128,8 +128,8 @@ QuadTree<U>* QuadTree<U>::Locate(WorldObject* pObject)
     return nullptr;
 }
 
-template <class U>
-void QuadTree<U>::Update(WorldObject* pObject)
+template <class W, class U>
+void QuadTree<W, U>::Update(W* pObject)
 {
     QuadTree* pTree = Locate(pObject);
     if (pTree && !pTree->Area.intersects(pObject->GetRect()))

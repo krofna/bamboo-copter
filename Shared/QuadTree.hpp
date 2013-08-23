@@ -4,25 +4,23 @@
 #include "Shared/Rectangle.hpp"
 #include "Shared/LinkedList.hpp"
 #include "Shared/BasicTypes.hpp"
-#include "WorldObject.hpp"
 #include <limits>
 #include <memory>
 
-static const uint32 MAX_QUAD_CAPACITY = 32;
+static const uint32 MAX_QUAD_CAPACITY = 16;
 
-template <class U>
-class QuadTree : private LinkedList<WorldObject>
+template <class W, class U>
+class QuadTree : private LinkedList<W>
 {
 public:
     QuadTree();
     QuadTree(Rect<U> Area, QuadTree* pParent);
     ~QuadTree();
 
-    bool Insert(WorldObject* pObject);
-    void Remove(WorldObject* pObject);
-    void Update(WorldObject* pObject);
+    bool Insert(W* pObject);
+    void Remove(W* pObject);
+    void Update(W* pObject);
 
-protected:
     template <class T>
     void Traverse(T Func);
 
@@ -33,7 +31,7 @@ protected:
     void Foreach(T Func);
 
 private:
-    QuadTree* Locate(WorldObject* pObject);
+    QuadTree* Locate(W* pObject);
 
     uint8 Size;
     Rect<U> Area;

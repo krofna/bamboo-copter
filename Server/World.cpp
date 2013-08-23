@@ -1,37 +1,45 @@
 #include "World.hpp"
 #include "Shared/Database.hpp"
 #include "Shared/DataMgr.hpp"
-#include "Map.hpp"
+#include "Pathfinder.hpp"
 
 #define HEARTBEAT 50
+
+World* sWorld;
 
 World::World(boost::asio::io_service& io) :
 UpdateTimer(io),
 io(io)
 {
+    sDataMgr = new DataMgr;
+    sPathfinder = new Pathfinder;
 }
 
 World::~World()
 {
     delete sDataMgr;
+    delete sPathfinder;
 }
 
 void World::Load()
 {
-    sDataMgr = new DataMgr;
     sDataMgr->LoadFile("../Shared/test.tem");
 
     sDatabase.Connect();
-    QueryResult Result(sDatabase.PQuery("SELECT `name`, `guid` FROM `maps`"));
+    QueryResult Result(sDatabase.PQuery("SELECT `name`, `guid`, `width`, `height` FROM `maps`"));
     std::string MapName;
     uint64 MapGUID;
+    uint16 Width, Height;
 
     while (Result->next())
     {
         MapName = Result->getString(1);
         MapGUID = Result->getUInt64(2);
-        Map* pMap = new Map(MapName, MapGUID);
+        Width = Result->getUInt(3);
+        Height = Result->getUInt(4);
+        Map* pMap = new Map(MapName, MapGUID, Width, Height);
         pMap->LoadObjects();
+        LinkedList::Insert(pMap);
     }
 
     io.post(std::bind(&World::Run, this));
@@ -46,4 +54,9 @@ void World::Run()
 
 void World::Update()
 {
+}
+
+void World::ResetPathfinderNodes()
+{
+    Foreach(std::bind(&Map::ResetPathfinderNodes, std::placeholders::_1));
 }

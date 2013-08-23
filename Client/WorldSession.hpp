@@ -21,6 +21,7 @@ public:
     void HandleTemplate();
     void HandleLogin();
     void HandleObjectCreate();
+    void HandleMove();
 
     void Login(std::string Username);
     void Connect(std::string IP, std::string Port);

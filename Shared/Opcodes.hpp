@@ -5,10 +5,11 @@ class WorldSession;
 
 enum Opcodes
 {
-    MSG_NULL           = 0x0,
-    SMSG_TEMPLATE      = 0x1,
-    MSG_LOGIN          = 0x2,
-    SMSG_OBJECT_CREATE = 0x3,
+    MSG_NULL            = 0x0,
+    SMSG_TEMPLATE       = 0x1,
+    MSG_LOGIN           = 0x2,
+    SMSG_OBJECT_CREATE  = 0x3,
+    MSG_MOVE            = 0x4,
     MSG_COUNT
 };
 

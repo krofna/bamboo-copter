@@ -11,6 +11,7 @@ public:
 
     void HandleNULL();
     void HandleLogin();
+    void HandleMove();
 
 private:
 };

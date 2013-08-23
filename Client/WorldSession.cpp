@@ -3,6 +3,7 @@
 #include "Shared/Opcodes.hpp"
 #include "WorldObject.hpp"
 #include "Shared/World.hpp"
+#include "Shared/ObjectHolder.hpp"
 #include <boost/asio/connect.hpp>
 #include <boost/bind/bind.hpp>
 
@@ -54,12 +55,25 @@ void WorldSession::HandleObjectCreate()
 {
     uint64 GUID;
     uint32 Entry;
-    uint32 x, y;
+    uint16 x, y;
     RecPckt >> GUID >> Entry >> x >> y;
-    WorldObject* pObject = new WorldObject(Entry);
+    WorldObject* pObject = new WorldObject(Entry, GUID);
     pObject->SetPosition(sf::Vector2f(x, y));
-    pObject->SetAnimationSpeed(sf::milliseconds(300)); // Placeholder: Should be part of animation template
+    pObject->SetAnimationSpeed(sf::milliseconds(300)); // TODO: Should be part of animation template
     pWorld->Insert(pObject);
+    ObjectHolder<WorldObject>::Insert(pObject); // TODO: Type mask
+}
+
+void WorldSession::HandleMove()
+{
+    uint64 GUID;
+    RecPckt >> GUID;
+    if (WorldObject* pObject = ObjectHolder<WorldObject>::Find(GUID))
+    {
+        uint16 x, y;
+        RecPckt >> x >> y;
+        pObject->Move(x, y);
+    }
 }
 
 void WorldSession::HandleNULL()
