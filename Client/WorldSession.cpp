@@ -7,15 +7,19 @@
 #include <boost/asio/connect.hpp>
 #include <boost/bind/bind.hpp>
 
-WorldSession::WorldSession(io_service& io, World* pWorld) :
+WorldSession::WorldSession(io_service& io) :
 TCPSession(io),
-Resolver(io),
-pWorld(pWorld)
+Resolver(io)
 {
 }
 
 WorldSession::~WorldSession()
 {
+}
+
+void WorldSession::SetWorld(World* pWorld)
+{
+    this->pWorld = pWorld;
 }
 
 void WorldSession::Connect(std::string IP, std::string Port)
@@ -39,6 +43,13 @@ void WorldSession::Login(std::string Username)
 {
     Packet Pckt(MSG_LOGIN);
     Pckt << Username;
+    Send(Pckt);
+}
+
+void WorldSession::SendMoveHeroPacket(uint8 Direction)
+{
+    Packet Pckt(MSG_MOVE);
+    Pckt << Direction;
     Send(Pckt);
 }
 

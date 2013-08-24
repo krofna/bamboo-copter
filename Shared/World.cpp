@@ -12,23 +12,17 @@ World::~World()
 
 void World::Draw()
 {
-    ObjectMutex.lock();
     QuadTree::TraverseArea(View.getViewport(), std::bind(&WorldObject::Draw, std::placeholders::_1, std::ref(Window)));
-    ObjectMutex.unlock();
 }
 
 void World::Update()
 {
-    ObjectMutex.lock();
     QuadTree::TraverseArea(View.getViewport(), std::bind(&WorldObject::Update, std::placeholders::_1));
-    ObjectMutex.unlock();
 }
 
 void World::Insert(WorldObject* pObject)
 {
-    ObjectMutex.lock();
     QuadTree::Insert(pObject);
-    ObjectMutex.unlock();
 }
 
 void World::HandleEvent(sf::Event Event)

@@ -1,6 +1,6 @@
 #include "Shared/Game.hpp"
 #include "Shared/DataMgr.hpp"
-#include "Shared/World.hpp"
+#include "CWorld.hpp"
 #include "WorldSession.hpp"
 #include "Shared/Log.hpp"
 
@@ -15,12 +15,13 @@ void GenDummyTemplateFile()
     f.Close();
 }
 
-void StartNetworking(boost::asio::io_service& io, World* pWorld)
+WorldSessionPtr StartNetworking(boost::asio::io_service& io)
 {
-    WorldSessionPtr pSession = boost::make_shared<WorldSession>(io, pWorld);
+    WorldSessionPtr pSession = boost::make_shared<WorldSession>(io);
     pSession->Connect("127.0.0.1", "48879");
     boost::thread NetworkingThread(boost::bind(&boost::asio::io_service::run, &io));
     NetworkingThread.detach();
+    return pSession;
 }
 
 int main(int argc, char** argv)
@@ -30,10 +31,8 @@ int main(int argc, char** argv)
 
     sDataMgr = new DataMgr;
     sDataMgr->LoadFile("../Shared/test.tem");
-    Game* pGame = new Game("beech-copter");
-    World* pWorld = new World(pGame->GetWindow());
-
-    StartNetworking(io, pWorld);
+    Game* pGame = new Game("bamboo-copter");
+    World* pWorld = new CWorld(pGame->GetWindow(), StartNetworking(io));
 
     pGame->PushState(pWorld);
     pGame->Run();

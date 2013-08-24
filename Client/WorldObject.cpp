@@ -70,5 +70,6 @@ uint64 WorldObject::GetGUID() const
 void WorldObject::Move(uint16 x, uint16 y)
 {
     // TODO: Flip animation from standing to moving
+    // TODO: "Jump" (Lag) to previous location if not reached
     // TODO: Start sliding towards x and y
 }

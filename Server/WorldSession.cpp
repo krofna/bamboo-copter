@@ -23,6 +23,8 @@ void WorldSession::HandleLogin()
 
 void WorldSession::HandleMove()
 {
+    uint8 Direction;
+    RecPckt >> Direction;
 }
 
 void WorldSession::HandleNULL()

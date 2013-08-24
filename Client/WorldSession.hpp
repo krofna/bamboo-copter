@@ -14,7 +14,7 @@ typedef boost::shared_ptr<WorldSession> WorldSessionPtr;
 class WorldSession : public TCPSession
 {
 public:
-    WorldSession(io_service& io, World* pWorld);
+    WorldSession(io_service& io);
     ~WorldSession();
 
     void HandleNULL();
@@ -24,8 +24,10 @@ public:
     void HandleMove();
 
     void Login(std::string Username);
+    void SendMoveHeroPacket(uint8 Direction);
     void Connect(std::string IP, std::string Port);
 
+    void SetWorld(World* pWorld);
 private:
     void OnConnect(const boost::system::error_code& Error);
     TCPResolver Resolver;
