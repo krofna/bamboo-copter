@@ -14,6 +14,7 @@ MapGUID(GUID)
 void Map::Update()
 {
     Objects.Traverse(std::bind(&WorldObject::Update, std::placeholders::_1));
+    Objects.Traverse(std::bind(&WorldObject::SendUpdate, std::placeholders::_1));
 }
 
 void Map::LoadObjects()

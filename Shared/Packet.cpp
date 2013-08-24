@@ -130,3 +130,8 @@ Packet& Packet::operator >>(std::string& data)
     ReadPos += data.size(); ++ReadPos;
     return *this; 
 }
+
+Packet::operator bool()
+{
+    return !EndOfPacket();
+}

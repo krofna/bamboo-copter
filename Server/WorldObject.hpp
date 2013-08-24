@@ -4,6 +4,7 @@
 #include "Shared/Rectangle.hpp"
 #include "Shared/BasicTypes.hpp"
 #include "Node.hpp"
+#include "Shared/Packet.hpp"
 
 class Map;
 class Player;
@@ -26,13 +27,20 @@ public:
     virtual void Update();
     void CreateForPlayer(Player* pPlayer);
     Map* GetMap() const;
+
     void Relocate(Map* pMap, uint16 x, uint16 y);
-    void Relocate(uint16 x, uint16 y);
+    void SetX(uint16 x);
+    void SetY(uint16 y);
+    uint16 GetX() const;
+    uint16 GetY() const;
+
+    void SendUpdate();
 
 private:
     uint64 GUID;
     uint32 Entry;
     Map* pMap;
+    Packet ObjectUpdate;
 };
 
 class Terrain : public Object, public Node

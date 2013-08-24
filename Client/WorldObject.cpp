@@ -72,4 +72,15 @@ void WorldObject::Move(uint16 x, uint16 y)
     // TODO: Flip animation from standing to moving
     // TODO: "Jump" (Lag) to previous location if not reached
     // TODO: Start sliding towards x and y
+    Sprite.setPosition(x, y); // Placeholder
+}
+
+void WorldObject::MoveX(uint16 x)
+{
+    Sprite.setPosition(GetPosition() + sf::Vector2<float>(x, 0));
+}
+
+void WorldObject::MoveY(uint16 y)
+{
+    Sprite.setPosition(GetPosition() + sf::Vector2<float>(0, y));
 }

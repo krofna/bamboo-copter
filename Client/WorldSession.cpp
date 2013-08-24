@@ -48,7 +48,7 @@ void WorldSession::Login(std::string Username)
 
 void WorldSession::SendMoveHeroPacket(uint8 Direction)
 {
-    Packet Pckt(MSG_MOVE);
+    Packet Pckt(CMSG_MOVE);
     Pckt << Direction;
     Send(Pckt);
 }
@@ -75,15 +75,31 @@ void WorldSession::HandleObjectCreate()
     ObjectHolder<WorldObject>::Insert(pObject); // TODO: Type mask
 }
 
-void WorldSession::HandleMove()
+void WorldSession::HandleObjectUpdate()
 {
     uint64 GUID;
+    uint8 UpdateField;
+
     RecPckt >> GUID;
-    if (WorldObject* pObject = ObjectHolder<WorldObject>::Find(GUID))
+    WorldObject* pObject = ObjectHolder<WorldObject>::Find(GUID);
+
+    while (RecPckt >> UpdateField)
     {
-        uint16 x, y;
-        RecPckt >> x >> y;
-        pObject->Move(x, y);
+        switch (UpdateField)
+        {
+            case UPDATE_FIELD_X:
+                uint16 x;
+                RecPckt >> x;
+                pObject->MoveX(x);
+                break;
+            case UPDATE_FIELD_Y:
+                uint16 y;
+                RecPckt >> y;
+                pObject->MoveY(y);
+                break;
+            default:
+                break;
+        }
     }
 }
 
@@ -91,4 +107,3 @@ void WorldSession::HandleNULL()
 {
     sLog.Write(LOG_ERROR, "Received strange opcode: %s", OpcodeTable[RecPckt.GetOpcode()].name);
 }
-

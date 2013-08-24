@@ -14,9 +14,6 @@ using namespace boost::asio;
 typedef boost::asio::deadline_timer DeadlineTimer;
 typedef boost::asio::ip::tcp::endpoint TCPEndpoint;
 typedef boost::asio::ip::tcp::socket TCPSocket;
-#ifndef _MSC_VER
-template <class T> using Queue = std::queue<T>;
-#endif
 
 class TCPSession : private boost::noncopyable, public boost::enable_shared_from_this<TCPSession>
 {
@@ -35,11 +32,7 @@ protected:
     TCPSocket Socket;
     Packet RecPckt;
 
-#ifndef _MSC_VER
-    Queue<Packet> MessageQueue;
-#else
 	std::queue<Packet> MessageQueue;
-#endif
 };
 
 #endif

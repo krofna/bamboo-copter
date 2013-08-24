@@ -21,13 +21,14 @@ public:
     void HandleTemplate();
     void HandleLogin();
     void HandleObjectCreate();
-    void HandleMove();
+    void HandleObjectUpdate();
 
     void Login(std::string Username);
     void SendMoveHeroPacket(uint8 Direction);
     void Connect(std::string IP, std::string Port);
 
     void SetWorld(World* pWorld);
+
 private:
     void OnConnect(const boost::system::error_code& Error);
     TCPResolver Resolver;

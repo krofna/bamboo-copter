@@ -23,6 +23,8 @@ public:
     void SetAnimationSpeed(sf::Time Speed);
     void SetSize(sf::Vector2f Size);
     void Move(uint16 x, uint16 y);
+    void MoveX(uint16 x);
+    void MoveY(uint16 y);
     uint64 GetGUID() const;
 
 private:

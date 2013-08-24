@@ -3,10 +3,16 @@
 #include "PlayerHolder.hpp"
 #include "Map.hpp"
 #include "Shared/Opcodes.hpp"
+#include "Shared/Defines.hpp"
 
 WorldSession::WorldSession(io_service& io) :
 TCPSession(io)
 {
+}
+
+void WorldSession::SetPlayer(Player* pPlayer)
+{
+    this->pPlayer = pPlayer;
 }
 
 void WorldSession::HandleLogin()
@@ -25,6 +31,22 @@ void WorldSession::HandleMove()
 {
     uint8 Direction;
     RecPckt >> Direction;
+
+    switch (Direction)
+    {
+    case MOVE_UP:
+        pPlayer->SetY(pPlayer->GetY() - 1);
+        break;
+    case MOVE_DOWN:
+        pPlayer->SetY(pPlayer->GetY() + 1);
+        break;
+    case MOVE_LEFT:
+        pPlayer->SetX(pPlayer->GetX() - 1);
+        break;
+    case MOVE_RIGHT:
+        pPlayer->SetX(pPlayer->GetX() + 1);
+        break;
+    }
 }
 
 void WorldSession::HandleNULL()
