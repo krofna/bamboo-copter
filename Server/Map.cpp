@@ -82,6 +82,7 @@ LinkedList<Terrain>* Map::TerrainAt(Rect<uint16> Where)
 
 Terrain* Map::TerrainAt(uint16 X, uint16 Y, uint16 Size)
 {
+    /* TODO: Depend on terrain level*/
     return TerrainAt(sf::Rect<uint16>(X, Y, Size, Size))->Data();
 }
 
