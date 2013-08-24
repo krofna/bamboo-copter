@@ -3,12 +3,14 @@
 #include "Shared/Defines.hpp"
 
 WorldObject::WorldObject(uint32 Entry, uint64 GUID) :
+TexPosIter(0),
 CurrAnim(0),
 GUID(GUID)
 {
     pTemplate = sDataMgr->GetAnimationTemplate(Entry);
     Sprite.setTexture(*pTemplate->pTexture);
     this->Size = sf::Vector2f(pTemplate->Size);
+    Sprite.setTextureRect(sf::IntRect(sf::Vector2i(pTemplate->TexPos[0][0]), sf::Vector2i(Size)));
 }
 
 Rect<float> WorldObject::GetRect() const
@@ -47,6 +49,7 @@ void WorldObject::SetAnimation(uint8 NewAnim)
 {
     CurrAnim = NewAnim;
     TexPosIter = 0;
+    Sprite.setTextureRect(sf::IntRect(sf::Vector2i(pTemplate->TexPos[CurrAnim][TexPosIter]), sf::Vector2i(Size)));
 }
 
 void WorldObject::SetAnimationSpeed(sf::Time Speed)
