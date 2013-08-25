@@ -30,8 +30,6 @@ public:
     bool EndOfPacket();
     void Write(char* data, uint16 size);
 
-    operator bool();
-
     Packet& operator <<(uint8 data);
     Packet& operator <<(uint16 data);
     Packet& operator <<(uint32 data);

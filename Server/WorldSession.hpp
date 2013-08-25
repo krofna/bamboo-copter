@@ -11,8 +11,6 @@ class WorldSession : public TCPSession
 public:
     WorldSession(io_service& io);
 
-    void SetPlayer(Player* pPlayer);
-
     void HandleNULL();
     void HandleLogin();
     void HandleMove();

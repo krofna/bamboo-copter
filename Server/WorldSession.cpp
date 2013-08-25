@@ -6,13 +6,9 @@
 #include "Shared/Defines.hpp"
 
 WorldSession::WorldSession(io_service& io) :
-TCPSession(io)
+TCPSession(io),
+pPlayer(nullptr)
 {
-}
-
-void WorldSession::SetPlayer(Player* pPlayer)
-{
-    this->pPlayer = pPlayer;
 }
 
 void WorldSession::HandleLogin()
@@ -20,7 +16,7 @@ void WorldSession::HandleLogin()
     std::string Username;
     RecPckt >> Username;
 
-    if (Player* pPlayer = ObjectHolder<Player>::Find(Username))
+    if ((pPlayer = ObjectHolder<Player>::Find(Username)))
     {
         pPlayer->pSession = this;
         pPlayer->GetMap()->AddPlayer(pPlayer);

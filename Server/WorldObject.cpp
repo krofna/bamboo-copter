@@ -55,6 +55,10 @@ Map* WorldObject::GetMap() const
 
 void WorldObject::SendUpdate()
 {
+    // Nothing to send
+    if (ObjectUpdate.GetSizeWithoutHeader() == sizeof(uint64))
+        return;
+
     pMap->SendToPlayers(ObjectUpdate);
     ObjectUpdate = Packet(SMSG_OBJECT_UPDATE);
     ObjectUpdate << GUID;

@@ -42,7 +42,8 @@ void World::Load()
         LinkedList::Insert(pMap);
     }
 
-    io.post(std::bind(&World::Run, this));
+    UpdateTimer.expires_from_now(boost::posix_time::milliseconds(HEARTBEAT));
+    UpdateTimer.async_wait(std::bind(&World::Run, this));
 }
 
 void World::Run()
@@ -54,6 +55,7 @@ void World::Run()
 
 void World::Update()
 {
+    Foreach(std::bind(&Map::Update, std::placeholders::_1));
 }
 
 void World::ResetPathfinderNodes()

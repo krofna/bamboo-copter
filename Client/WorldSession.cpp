@@ -83,8 +83,9 @@ void WorldSession::HandleObjectUpdate()
     RecPckt >> GUID;
     WorldObject* pObject = ObjectHolder<WorldObject>::Find(GUID);
 
-    while (RecPckt >> UpdateField)
+    while (!RecPckt.EndOfPacket())
     {
+        RecPckt >> UpdateField;
         switch (UpdateField)
         {
             case UPDATE_FIELD_X:
