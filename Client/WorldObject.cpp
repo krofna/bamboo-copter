@@ -77,10 +77,10 @@ void WorldObject::Move(uint16 x, uint16 y)
 
 void WorldObject::MoveX(uint16 x)
 {
-    Sprite.setPosition(GetPosition() + sf::Vector2<float>(x, 0));
+    Sprite.setPosition(sf::Vector2<float>(x, GetPosition().y));
 }
 
 void WorldObject::MoveY(uint16 y)
 {
-    Sprite.setPosition(GetPosition() + sf::Vector2<float>(0, y));
+    Sprite.setPosition(sf::Vector2<float>(GetPosition().x, y));
 }

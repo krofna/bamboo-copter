@@ -19,7 +19,7 @@ class TCPSession : private boost::noncopyable, public boost::enable_shared_from_
 {
 public:
     TCPSession(io_service& io);
-    virtual ~TCPSession();
+    virtual ~TCPSession() = 0;
 
     void Send(Packet& Pckt);
 
