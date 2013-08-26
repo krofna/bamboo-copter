@@ -31,7 +31,6 @@ ${CMAKE_SOURCE_DIR}/Shared/Packet.cpp
 ${CMAKE_SOURCE_DIR}/Shared/TCPSession.cpp
 ${CMAKE_SOURCE_DIR}/Shared/DataMgr.cpp
 ${CMAKE_SOURCE_DIR}/Shared/File.cpp
-${CMAKE_SOURCE_DIR}/Shared/Factory.cpp
 )
 file(
 GLOB_RECURSE
