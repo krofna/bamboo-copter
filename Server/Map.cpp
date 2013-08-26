@@ -39,14 +39,15 @@ void Map::LoadObjects()
         ObjectHolder<Player>::Insert((Player*)pObject);
     }
 
-    Result = sDatabase.PQuery("SELECT `guid`, `entry`, `x`, `y` FROM `creature` WHERE map='%llu'", MapGUID);
+    Result = sDatabase.PQuery("SELECT `guid`, `entry`, `x`, `y`, `scriptname` FROM `creature` WHERE map='%llu'", MapGUID);
     while (Result->next())
     {
         GUID  = Result->getUInt64(1);
         Entry = Result->getUInt  (2);
         x     = Result->getUInt  (3);
         y     = Result->getUInt  (4);
-        pObject = new Creature(GUID, Entry);
+        Name  = Result->getString(5); // Scriptname
+        pObject = new Creature(GUID, Entry, Name);
         pObject->Relocate(this, x, y);
         Objects.Insert(pObject);
         ObjectHolder<Creature>::Insert((Creature*)pObject);
@@ -90,4 +91,9 @@ Terrain* Map::TerrainAt(uint16 X, uint16 Y, uint16 Size)
 void Map::ResetPathfinderNodes()
 {
     QuadTree::Traverse(std::bind(&Terrain::ResetPathfinderNode, std::placeholders::_1));
+}
+
+uint64 Map::GetGUID()
+{
+    return MapGUID;
 }

@@ -7,6 +7,8 @@
 
 World* sWorld;
 
+extern void LoadScripts();
+
 World::World(boost::asio::io_service& io) :
 UpdateTimer(io),
 io(io)
@@ -23,8 +25,8 @@ World::~World()
 
 void World::Load()
 {
+    LoadScripts();
     sDataMgr->LoadFile("../Shared/test.tem");
-
     sDatabase.Connect();
     QueryResult Result(sDatabase.PQuery("SELECT `name`, `guid`, `width`, `height` FROM `maps`"));
     std::string MapName;
@@ -61,4 +63,12 @@ void World::Update()
 void World::ResetPathfinderNodes()
 {
     Foreach(std::bind(&Map::ResetPathfinderNodes, std::placeholders::_1));
+}
+
+Map* World::GetMap(uint64 GUID)
+{
+    for (LinkedList* i = this; i != nullptr; i = i->Next())
+        if (i->Data()->GetGUID() == GUID)
+            return i->Data();
+    return nullptr;
 }

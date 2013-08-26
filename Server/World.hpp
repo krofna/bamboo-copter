@@ -15,6 +15,8 @@ public:
     void Run();
     void Update();
 
+    Map* GetMap(uint64 GUID);
+
     void ResetPathfinderNodes();
 private:
     boost::asio::deadline_timer UpdateTimer;

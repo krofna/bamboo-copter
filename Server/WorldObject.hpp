@@ -26,8 +26,8 @@ public:
     uint64 GetGUID() const;
     virtual void Update();
     void CreateForPlayer(Player* pPlayer);
-    Map* GetMap() const;
 
+    Map* GetMap() const;
     void Relocate(Map* pMap, uint16 x, uint16 y);
     void SetX(uint16 x);
     void SetY(uint16 y);

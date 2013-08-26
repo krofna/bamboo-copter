@@ -19,6 +19,7 @@ public:
     LinkedList<Terrain>* TerrainAt(Rect<uint16> Where);
 
     void ResetPathfinderNodes();
+    uint64 GetGUID();
 
 private:
     QuadTree<WorldObject, uint16> Objects;
