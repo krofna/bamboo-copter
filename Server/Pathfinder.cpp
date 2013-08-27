@@ -53,12 +53,14 @@ void Pathfinder::ProcessAll()
     }
 }
 
-void Pathfinder::Relax(Node* pFirst, Node* pSecond, uint16 Cost)
+void Pathfinder::Relax(Node* pFirst, uint16 x, uint16 y, uint16 size, uint16 Cost)
 {
-    if (!pSecond)
+    if (pMap->At(x, y, size)) // Collision
         return;
 
-    delete pSecond;
+    Node* pSecond = pMap->TerrainAt(x, y, size);
+    if (!pSecond) // No terrain
+        return;
 
     if (pSecond->Color < GRAY || pSecond->Cost > pFirst->Cost + Cost)
     {
@@ -81,7 +83,7 @@ void Pathfinder::GeneratePath()
 {
     std::stack<sf::Vector2<uint16> >* pPath = new std::stack<sf::Vector2<uint16> >;
 
-    Map* pMap = pWork->pMotionMaster->pMe->GetMap();
+    pMap = pWork->pMotionMaster->pMe->GetMap();
 
     if (GRAY == 0xFFFF)
         sWorld->ResetPathfinderNodes();
@@ -118,21 +120,21 @@ void Pathfinder::GeneratePath()
         }
 
         // Right
-        Relax(pCurrent, pMap->TerrainAt(pCurrent->GetY() / PERFECTION_LEVEL, pCurrent->GetX() / PERFECTION_LEVEL + PERFECTION_LEVEL, PERFECTION_LEVEL), 10);
+        Relax(pCurrent, pCurrent->GetY() / PERFECTION_LEVEL, pCurrent->GetX() / PERFECTION_LEVEL + PERFECTION_LEVEL, PERFECTION_LEVEL, 10);
         // Low
-        Relax(pCurrent, pMap->TerrainAt(pCurrent->GetY() / PERFECTION_LEVEL + PERFECTION_LEVEL, pCurrent->GetX(), PERFECTION_LEVEL), 10);
+        Relax(pCurrent, pCurrent->GetY() / PERFECTION_LEVEL + PERFECTION_LEVEL, pCurrent->GetX(), PERFECTION_LEVEL, 10);
         // Right-low
-        Relax(pCurrent, pMap->TerrainAt(pCurrent->GetY() / PERFECTION_LEVEL + PERFECTION_LEVEL, pCurrent->GetX() / PERFECTION_LEVEL + PERFECTION_LEVEL, PERFECTION_LEVEL), 14);
+        Relax(pCurrent, pCurrent->GetY() / PERFECTION_LEVEL + PERFECTION_LEVEL, pCurrent->GetX() / PERFECTION_LEVEL + PERFECTION_LEVEL, PERFECTION_LEVEL, 14);
         // Left
-        Relax(pCurrent, pMap->TerrainAt(pCurrent->GetY() / PERFECTION_LEVEL, pCurrent->GetX() / PERFECTION_LEVEL - PERFECTION_LEVEL, PERFECTION_LEVEL), 10);
+        Relax(pCurrent, pCurrent->GetY() / PERFECTION_LEVEL, pCurrent->GetX() / PERFECTION_LEVEL - PERFECTION_LEVEL, PERFECTION_LEVEL, 10);
         // High
-        Relax(pCurrent, pMap->TerrainAt(pCurrent->GetY() / PERFECTION_LEVEL - PERFECTION_LEVEL, pCurrent->GetX() / PERFECTION_LEVEL, PERFECTION_LEVEL), 10);
+        Relax(pCurrent, pCurrent->GetY() / PERFECTION_LEVEL - PERFECTION_LEVEL, pCurrent->GetX() / PERFECTION_LEVEL, PERFECTION_LEVEL, 10);
         // Left-high
-        Relax(pCurrent, pMap->TerrainAt(pCurrent->GetY() / PERFECTION_LEVEL - PERFECTION_LEVEL, pCurrent->GetX() / PERFECTION_LEVEL - PERFECTION_LEVEL, PERFECTION_LEVEL), 14);
+        Relax(pCurrent, pCurrent->GetY() / PERFECTION_LEVEL - PERFECTION_LEVEL, pCurrent->GetX() / PERFECTION_LEVEL - PERFECTION_LEVEL, PERFECTION_LEVEL, 14);
         // Left-low
-        Relax(pCurrent, pMap->TerrainAt(pCurrent->GetY() / PERFECTION_LEVEL + PERFECTION_LEVEL, pCurrent->GetX() / PERFECTION_LEVEL - PERFECTION_LEVEL, PERFECTION_LEVEL), 14);
+        Relax(pCurrent, pCurrent->GetY() / PERFECTION_LEVEL + PERFECTION_LEVEL, pCurrent->GetX() / PERFECTION_LEVEL - PERFECTION_LEVEL, PERFECTION_LEVEL, 14);
         // Right-high
-        Relax(pCurrent, pMap->TerrainAt(pCurrent->GetY() / PERFECTION_LEVEL - PERFECTION_LEVEL, pCurrent->GetX() / PERFECTION_LEVEL + PERFECTION_LEVEL, PERFECTION_LEVEL), 14);
+        Relax(pCurrent, pCurrent->GetY() / PERFECTION_LEVEL - PERFECTION_LEVEL, pCurrent->GetX() / PERFECTION_LEVEL + PERFECTION_LEVEL, PERFECTION_LEVEL, 14);
 
         pCurrent->Color = BLACK;
     }

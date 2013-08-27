@@ -75,6 +75,11 @@ LinkedList<WorldObject>* Map::At(Rect<uint16> Where)
     return ObjectList;
 }
 
+WorldObject* Map::At(uint16 X, uint16 Y, uint16 Size)
+{
+    return At(sf::Rect<uint16>(X, Y, Size, Size))->Data();
+}
+
 LinkedList<Terrain>* Map::TerrainAt(Rect<uint16> Where)
 {
     ::LinkedList<Terrain>* ObjectList = new LinkedList<Terrain>;

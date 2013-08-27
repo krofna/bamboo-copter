@@ -8,6 +8,7 @@
 
 class MotionMaster;
 class Unit;
+class Map;
 
 /*
  * Todo: Implement A* heuristics
@@ -23,7 +24,7 @@ public:
     void GeneratePath();
 
 private:
-    void Relax(Node* pFirst, Node* pSecond, uint16 Cost);
+    void Relax(Node* pFirst, uint16 x, uint16 y, uint16 size, uint16 Cost);
 
     struct Work
     {
@@ -32,6 +33,7 @@ private:
         sf::Vector2<uint16> Target;
     };
     Work* pWork;
+    Map* pMap;
     std::queue<Work*> WorkQueue;
     std::mutex WorkMutex;
     

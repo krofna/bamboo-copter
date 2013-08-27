@@ -15,6 +15,7 @@ public:
     void SendToPlayers(Packet& Pckt);
 
     Terrain* TerrainAt(uint16 X, uint16 Y, uint16 Size);
+    WorldObject* At(uint16 X, uint16 Y, uint16 Size);
     LinkedList<WorldObject>* At(Rect<uint16> Where);
     LinkedList<Terrain>* TerrainAt(Rect<uint16> Where);
 
