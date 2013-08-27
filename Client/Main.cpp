@@ -10,8 +10,8 @@
 
 void GenDummyTemplateFile()
 {
-    File f("test.tem", std::ios::out);
-    f << uint32(0) << std::string("test.png") << uint16(TILE_SIZE) << uint16(TILE_SIZE) << uint8(1) << uint8(2) << uint8(0) << uint8(0) << uint8(1) << uint8(0);
+    File f("../Shared/test.tem", std::ios::out);
+    f << (uint8)ANIMATION_TEMPLATE << uint32(0) << std::string("test.png") << uint16(TILE_SIZE) << uint16(TILE_SIZE) << uint8(1) << uint8(2) << uint8(0) << uint8(0) << uint8(1) << uint8(0);
     f.Close();
 }
 
@@ -26,6 +26,8 @@ WorldSessionPtr StartNetworking(boost::asio::io_service& io)
 
 int main(int argc, char** argv)
 {
+    GenDummyTemplateFile();
+
     boost::asio::io_service io;
     sLog.SetPriority(LOG_INFO);
 

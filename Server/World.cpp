@@ -27,6 +27,7 @@ void World::Load()
 {
     LoadScripts();
     sDataMgr->LoadFile("../Shared/test.tem");
+    sDataMgr->LoadFile("../Shared/CreatureTemplate.tem");
     sDatabase.Connect();
     QueryResult Result(sDatabase.PQuery("SELECT `name`, `guid`, `width`, `height` FROM `maps`"));
     std::string MapName;

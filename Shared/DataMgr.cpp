@@ -1,6 +1,7 @@
 #include "DataMgr.hpp"
 #include "WorldObject.hpp"
 #include "Shared/Defines.hpp"
+#include "Shared/Log.hpp"
 
 #ifdef CLIENT
 #include <SFML/Graphics/Texture.hpp>
@@ -10,7 +11,6 @@ DataMgr* sDataMgr;
 
 DataMgr::DataMgr()
 {
-
 }
 
 DataMgr::~DataMgr()
@@ -20,7 +20,14 @@ DataMgr::~DataMgr()
 void DataMgr::LoadFile(std::string FileName)
 {
     File DataFile(FileName, std::ios::in);
-    ProcessAnimationTemplateFile(DataFile);
+    uint8 Type;
+    DataFile >> Type;
+    switch (Type)
+    {
+        case ANIMATION_TEMPLATE: ProcessAnimationTemplateFile(DataFile); break;
+        case CREATURE_TEMPLATE: ProcessCreatureTemplateFile(DataFile); break;
+        default: sLog.Write(LOG_ERROR, "Invalid Template file"); break;
+    }
 }
 
 CAnimationTemplate* DataMgr::GetAnimationTemplate(uint32 Entry)
@@ -29,6 +36,22 @@ CAnimationTemplate* DataMgr::GetAnimationTemplate(uint32 Entry)
     if (i != Animations.end())
         return &i->second;
     return nullptr;
+}
+
+CreatureTemplate* DataMgr::GetCreatureTemplate(uint32 Entry)
+{
+    auto i = CreatureTemplates.find(Entry);
+    if (i != CreatureTemplates.end())
+        return &i->second;
+    return nullptr;
+}
+
+HeroTemplate* DataMgr::GetHeroTemplate(uint32 Entry)
+{
+    // placeholder
+    static HeroTemplate t;
+    t.Entry = Entry;
+    return &t;
 }
 
 void DataMgr::ProcessAnimationTemplateFile(File& DataFile)
@@ -67,5 +90,18 @@ void DataMgr::ProcessAnimationTemplateFile(File& DataFile)
             }
         }
         Animations[Entry] = Template;
+    }
+}
+
+void DataMgr::ProcessCreatureTemplateFile(File& DataFile)
+{
+    CreatureTemplate Template;
+
+    while (true)
+    {
+        DataFile >> Template.Entry;
+        if (!DataFile) break;
+        DataFile >> Template.ScriptName;
+        CreatureTemplates[Template.Entry] = Template;
     }
 }

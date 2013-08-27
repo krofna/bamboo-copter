@@ -20,7 +20,6 @@ CREATE TABLE `creature`
     `x` SMALLINT UNSIGNED NOT NULL,
     `y` SMALLINT UNSIGNED NOT NULL,
     `map` INT UNSIGNED NOT NULL,
-    `scriptname` VARCHAR(20) NOT NULL,
     PRIMARY KEY(guid)
 );
 

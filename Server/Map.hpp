@@ -22,6 +22,7 @@ public:
     void ResetPathfinderNodes();
     uint64 GetGUID();
 
+    void Insert(WorldObject* pObject);
 private:
     QuadTree<WorldObject, uint16> Objects;
     LinkedList<Player> OnlinePlayers;

@@ -4,10 +4,13 @@
 #include "Shared/DataMgr.hpp"
 #include "Shared/Defines.hpp"
 #include "Map.hpp"
+#include "Creature.hpp"
+#include "Shared/ObjectHolder.hpp"
+
+uint64 WorldObject::NextGUID;
 
 WorldObject::WorldObject(uint64 GUID, uint32 Entry) :
 GUID(GUID),
-Entry(Entry),
 ObjectUpdate(SMSG_OBJECT_UPDATE)
 {
     CAnimationTemplate* pTemplate = sDataMgr->GetAnimationTemplate(Entry);
@@ -71,7 +74,7 @@ void WorldObject::Update()
 void WorldObject::CreateForPlayer(Player* pPlayer)
 {
     Packet Pckt(SMSG_OBJECT_CREATE);
-    Pckt << GUID << Entry << Rectg.left << Rectg.top;
+    Pckt << GUID << pTemplate->Entry << Rectg.left << Rectg.top;
     pPlayer->SendPacket(Pckt);
 }
 
@@ -80,6 +83,30 @@ void WorldObject::Relocate(Map* pMap, uint16 x, uint16 y)
     this->pMap = pMap;
     SetX(x);
     SetY(y);
+}
+
+Creature* WorldObject::SummonCreature(uint32 Entry, uint16 x, uint16 y)
+{
+    Creature* pCreature = new Creature(WorldObject::GetNextGUID(), Entry);
+    ObjectHolder<Creature>::Insert(pCreature);
+    GetMap()->Insert(pCreature);
+    pCreature->Relocate(GetMap(), x, y);
+    return pCreature;
+}
+
+uint32 WorldObject::GetEntry() const
+{
+    return pTemplate->Entry;
+}
+
+WorldObjectTemplate* WorldObject::GetTemplate()
+{
+    return pTemplate;
+}
+
+uint64 WorldObject::GetNextGUID()
+{
+    return NextGUID++;
 }
 
 void Terrain::ResetPathfinderNode()

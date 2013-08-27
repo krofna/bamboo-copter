@@ -8,8 +8,9 @@ class CreatureAI;
 class Creature : public Unit
 {
 public:
-    Creature(uint64 GUID, uint32 Entry, std::string ScriptName);
+    Creature(uint64 GUID, uint32 Entry);
 
+    CreatureTemplate* GetTemplate();
 private:
     CreatureAI* pAI;
 };

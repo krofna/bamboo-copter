@@ -17,12 +17,17 @@ void Map::Update()
     Objects.Traverse(std::bind(&WorldObject::SendUpdate, std::placeholders::_1));
 }
 
+void SetNextGUID(uint64 GUID)
+{
+    WorldObject::NextGUID = GUID;
+}
+
 void Map::LoadObjects()
 {
     QueryResult Result;
     WorldObject* pObject;
     uint32 Entry, x, y;
-    uint64 GUID;
+    uint64 GUID, MaxGUID = 0;
     std::string Name;
 
     Result = sDatabase.PQuery("SELECT `guid`, `entry`, `x`, `y`, `username` FROM `players` WHERE map='%llu'", MapGUID);
@@ -35,23 +40,30 @@ void Map::LoadObjects()
         Name  = Result->getString(5);
         pObject = new Player(GUID, Entry, Name);
         pObject->Relocate(this, x, y);
-        Objects.Insert(pObject);
+        Insert(pObject);
         ObjectHolder<Player>::Insert((Player*)pObject);
+
+        if (GUID > MaxGUID)
+            MaxGUID = GUID;
     }
 
-    Result = sDatabase.PQuery("SELECT `guid`, `entry`, `x`, `y`, `scriptname` FROM `creature` WHERE map='%llu'", MapGUID);
+    Result = sDatabase.PQuery("SELECT `guid`, `entry`, `x`, `y` FROM `creature` WHERE map='%llu'", MapGUID);
     while (Result->next())
     {
         GUID  = Result->getUInt64(1);
         Entry = Result->getUInt  (2);
         x     = Result->getUInt  (3);
         y     = Result->getUInt  (4);
-        Name  = Result->getString(5); // Scriptname
-        pObject = new Creature(GUID, Entry, Name);
+        pObject = new Creature(GUID, Entry);
         pObject->Relocate(this, x, y);
-        Objects.Insert(pObject);
+        Insert(pObject);
         ObjectHolder<Creature>::Insert((Creature*)pObject);
+
+        if (GUID > MaxGUID)
+            MaxGUID = GUID;
     }
+
+    SetNextGUID(MaxGUID + 1);
 }
 
 void Map::AddPlayer(Player* pPlayer)
@@ -101,4 +113,9 @@ void Map::ResetPathfinderNodes()
 uint64 Map::GetGUID()
 {
     return MapGUID;
+}
+
+void Map::Insert(WorldObject* pObject)
+{
+    Objects.Insert(pObject);
 }

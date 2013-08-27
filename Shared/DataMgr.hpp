@@ -16,10 +16,15 @@ public:
 
     void LoadFile(std::string FileName);
     CAnimationTemplate* GetAnimationTemplate(uint32 Entry);
+    CreatureTemplate* GetCreatureTemplate(uint32 Entry);
+    HeroTemplate* GetHeroTemplate(uint32 Entry);
 
 private:
+    void ProcessCreatureTemplateFile(File& DataFile);
     void ProcessAnimationTemplateFile(File& DataFile);
     std::map<uint32, CAnimationTemplate> Animations;
+    std::map<uint32, CreatureTemplate> CreatureTemplates;
+    std::map<uint32, HeroTemplate> HeroTemplates;
 };
 
 extern DataMgr* sDataMgr;
