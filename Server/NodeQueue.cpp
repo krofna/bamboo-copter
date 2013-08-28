@@ -23,7 +23,7 @@ void NodeQueue::Insert(Node* pNode)
         A.push_back(pNode);
     else
         A[Size] = pNode;
-    
+
     pNode->i = Size++;
 
     DecreaseKey(Size);

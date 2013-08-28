@@ -32,7 +32,7 @@ public:
 
     // Called before creature is hit by melee attack
     virtual void Hit(Unit* pAttacker, int32& Damage){}
-    
+
     void DoMeleeAttackIfReady();
 
 protected:

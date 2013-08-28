@@ -11,7 +11,7 @@ class AIFactory
 {
 public:
     static void RegisterCreatureAI(const std::string& AIName, CreatureAI*(*Creator)(Creature* pCreature));
-    
+
     static CreatureAI* CreateCreatureAI(const std::string& AIName, Creature* pCreature);
 
 private:

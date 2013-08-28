@@ -111,7 +111,7 @@ Packet& Packet::operator <<(std::string data)
     ByteBuffer[WritePos + data.size()] = '\0'; // We can do more simpler, by using std::copy(data.c_str(), data.c_str() + data.size() + 1), but ... the code is more complex. As you wish.
 
     WritePos += data.size(); ++WritePos;
-    return *this; 
+    return *this;
 }
 
 Packet& Packet::operator >>(uint8& data)  { data = Read<uint8>(); return *this; }
@@ -128,5 +128,5 @@ Packet& Packet::operator >>(std::string& data)
     // Raito : You've recreated std::strlen.
     data.assign(&ByteBuffer[ReadPos], std::char_traits<char>::length(&ByteBuffer[ReadPos])); // This should copy only characters, and exclude \0 character.
     ReadPos += data.size(); ++ReadPos;
-    return *this; 
+    return *this;
 }

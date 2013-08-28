@@ -36,7 +36,7 @@ private:
     Map* pMap;
     std::queue<Work*> WorkQueue;
     std::mutex WorkMutex;
-    
+
     /* 1)
      * OLDWHITE  OLDGRAY   OLDBLACK  <-- WHITE |GRAY  BLACK ...
      * 0,        1,        2,        <-- WHITE |3,    4,    ...

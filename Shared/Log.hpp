@@ -19,7 +19,7 @@ class Log : private boost::noncopyable
 public:
     void Initialize(const char* File);
     void SetPriority(int Priority);
-    
+
     template <typename... Arg>
     void Write(int Priority, std::string const& Format, Arg... Args);
 
