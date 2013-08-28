@@ -1,9 +1,9 @@
 #include "EventMgr.hpp"
 #include <algorithm>
 
-void EventMgr::Register(uint8 ID, std::function<void()> Callback, uint32 TimeFromNow)
+void EventMgr::Register(uint8 ID, std::function<void()> Callback, uint32 TimeFromNow, bool Perpetual)
 {
-    Events[ID] = Event { Callback, TimeFromNow };
+    Events[ID] = Event { Callback, TimeFromNow, TimeFromNow, Perpetual };
 }
 
 void EventMgr::Unregister(uint8 ID)
@@ -14,12 +14,14 @@ void EventMgr::Unregister(uint8 ID)
 void EventMgr::Update()
 {
     std::for_each(Events.begin(), Events.end(),
-    [](EventVal& i)
+    [this](EventVal& i)
     {
         if (i.second.TimeLeft < HEARTBEAT)
         {
             i.second.Callback();
-            // Unregister(i.first);
+            if (!i.second.Perpetual)
+                Unregister(i.first);
+            else i.second.TimeLeft = i.second.Time;
         }
         else
             i.second.TimeLeft -= HEARTBEAT;

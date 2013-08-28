@@ -12,6 +12,8 @@ struct Event
 {
     std::function<void()> Callback;
     uint32 TimeLeft;
+    uint32 Time;
+    bool Perpetual;
 };
 
 typedef std::map<uint8, Event> EventMap;
@@ -20,7 +22,7 @@ typedef EventMap::value_type EventVal;
 class EventMgr
 {
 public:
-    void Register(uint8 ID, std::function<void()> Callback, uint32 TimeFromNow);
+    void Register(uint8 ID, std::function<void()> Callback, uint32 TimeFromNow, bool Perpetual = false);
     void Unregister(uint8 ID);
 
     void Update();
