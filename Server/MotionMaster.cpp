@@ -48,7 +48,7 @@ void MotionMaster::MovePoint(sf::Vector2<uint16> Point)
 void MotionMaster::SetPath(std::stack<sf::Vector2<uint16> >* pPath)
 {
     PathMutex.lock();
-    delete pPath;
+    delete this->pPath;
     this->pPath = pPath;
     PathMutex.unlock();
 }
