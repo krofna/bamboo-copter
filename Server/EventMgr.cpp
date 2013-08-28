@@ -13,18 +13,23 @@ void EventMgr::Unregister(uint8 ID)
 
 void EventMgr::Update()
 {
-    std::for_each(Events.begin(), Events.end(),
-    [this](EventVal& i)
+    bool Erase;
+    auto i = Events.begin();
+    while (i != Events.end())
     {
-        if (i.second.TimeLeft < HEARTBEAT)
+        Erase = false;
+
+        if (i->second.TimeLeft < HEARTBEAT)
         {
-            i.second.Callback();
-            if (!i.second.Perpetual)
-                Unregister(i.first);
-            else i.second.TimeLeft = i.second.Time;
+            i->second.Callback();
+            if (!i->second.Perpetual)
+                Erase = true;
+            else i->second.TimeLeft = i->second.Time;
         }
         else
-            i.second.TimeLeft -= HEARTBEAT;
+            i->second.TimeLeft -= HEARTBEAT;
+
+        if (Erase) i = Events.erase(i);
+        else ++i;
     }
-    );
 }
