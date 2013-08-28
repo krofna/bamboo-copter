@@ -10,6 +10,11 @@ Unit(GUID, Entry)
     pAI = AIFactory::CreateCreatureAI(GetTemplate()->ScriptName, this);
 }
 
+void Creature::Update()
+{
+    pAI->UpdateAI();
+}
+
 CreatureTemplate* Creature::GetTemplate()
 {
     return (CreatureTemplate*)WorldObject::GetTemplate();

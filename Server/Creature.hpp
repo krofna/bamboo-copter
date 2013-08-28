@@ -10,6 +10,8 @@ class Creature : public Unit
 public:
     Creature(uint64 GUID, uint32 Entry);
 
+    virtual void Update();
+
     CreatureTemplate* GetTemplate();
 private:
     CreatureAI* pAI;

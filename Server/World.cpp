@@ -2,8 +2,7 @@
 #include "Shared/Database.hpp"
 #include "Shared/DataMgr.hpp"
 #include "Pathfinder.hpp"
-
-#define HEARTBEAT 50
+#include "Shared/Defines.hpp"
 
 World* sWorld;
 

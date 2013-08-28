@@ -2,7 +2,8 @@
 #define DEFINES_HPP
 
 #define TILE_SIZE 64
-#define GAME_HEARTBEAT 16
+#define HEARTBEAT 50 // Server
+#define GAME_HEARTBEAT 16 // Client
 
 enum
 {

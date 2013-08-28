@@ -6,7 +6,7 @@
 void GenDummyTemplateFile()
 {
     File f("../Shared/CreatureTemplate.tem", std::ios::out);
-    f << (uint8)CREATURE_TEMPLATE << (uint32)0 << "creature_ryan";
+    f << (uint8)CREATURE_TEMPLATE << (uint32)0 << std::string("creature_ryan");
     f.Close();
 }
 
