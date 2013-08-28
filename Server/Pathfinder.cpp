@@ -112,10 +112,7 @@ void Pathfinder::GeneratePath()
                 pPath->push(pCurrent->pParent->Position());
                 pCurrent = pCurrent->pParent;
             }
-            pWork->pMotionMaster->PathMutex.lock();
-            delete pWork->pMotionMaster->pPath;
-            pWork->pMotionMaster->pPath = pPath;
-            pWork->pMotionMaster->PathMutex.unlock();
+            pWork->pMotionMaster->SetPath(pPath);
             return;
         }
 

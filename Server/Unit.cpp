@@ -11,3 +11,14 @@ Unit::~Unit()
 {
     delete pMotionMaster;
 }
+
+void Unit::Update()
+{
+    WorldObject::Update();
+    pMotionMaster->Update();
+}
+
+MotionMaster* Unit::GetMotionMaster() const
+{
+    return pMotionMaster;
+}

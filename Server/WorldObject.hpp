@@ -32,6 +32,7 @@ public:
 
     Map* GetMap() const;
     void Relocate(Map* pMap, uint16 x, uint16 y);
+    void SetPosition(sf::Vector2<uint16> NewPos);
     void SetX(uint16 x);
     void SetY(uint16 y);
     uint16 GetX() const;

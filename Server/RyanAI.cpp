@@ -2,6 +2,8 @@
 #include "Shared/Log.hpp"
 #include "AIFactory.hpp"
 #include "EventMgr.hpp"
+#include "Creature.hpp"
+#include "MotionMaster.hpp"
 
 enum Events
 {
@@ -26,7 +28,7 @@ public:
 
     void NonPerpetual()
     {
-        sLog.Write(LOG_REQUESTED, "Event!");
+        pMe->GetMotionMaster()->MovePoint(sf::Vector2<uint16>(10 * 64, 10 * 64));
     }
 
     void UpdateAI()

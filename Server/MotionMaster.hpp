@@ -26,8 +26,12 @@ public:
     void ClearMotionStatus();
     void MoveChase(Unit* pTarget);
     void MovePoint(sf::Vector2<uint16> Point);
+    void SetPath(std::stack<sf::Vector2<uint16> >* pPath);
 
 private:
+    bool IsPathEmpty();
+    sf::Vector2<uint16> PopCheckpoint();
+
     std::stack<sf::Vector2<uint16> >* pPath;
     std::mutex PathMutex;
     uint8 MotionStatus;

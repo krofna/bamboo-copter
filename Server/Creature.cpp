@@ -12,6 +12,7 @@ Unit(GUID, Entry)
 
 void Creature::Update()
 {
+    Unit::Update();
     pAI->UpdateAI();
 }
 
