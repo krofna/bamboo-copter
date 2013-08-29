@@ -124,5 +124,6 @@ void DataMgr::ProcessTerrainTemplateFile(File& DataFile)
         Template.pTexture->loadFromFile(Texture);
 #endif
         DataFile >> Template.TexPos.x >> Template.TexPos.y >> Template.Size.x >> Template.Size.y;
+        TerrainTemplates[Template.Entry] = Template;
     }
 }

@@ -11,6 +11,12 @@ pPlayer(nullptr)
 {
 }
 
+WorldSession::~WorldSession()
+{
+    if (pPlayer)
+        pPlayer->pSession = nullptr;
+}
+
 void WorldSession::HandleLogin() // SAFE
 {
     std::string Username;

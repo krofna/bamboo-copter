@@ -22,6 +22,7 @@ void World::LoadMap(uint32 Entry)
     uint32 i = 0, j = 0;
     uint16 x, y, w, h;
 
+    VertexArray.resize(2); // TODO: Map template
     while (MapFile >> TEntry)
     {
         pTemplate = sDataMgr->GetTerrainTemplate(TEntry);
@@ -31,10 +32,13 @@ void World::LoadMap(uint32 Entry)
         VertexArray[j++].texCoords = sf::Vector2f(pTemplate->TexPos);
         VertexArray[j++].texCoords = sf::Vector2f(pTemplate->Size);
     }
+
+    pTerrainTileset = pTemplate->pTexture;
 }
 
 void World::Draw()
 {
+    Window.draw(VertexArray, pTerrainTileset);
     QuadTree::TraverseArea(View.getViewport(), std::bind(&WorldObject::Draw, std::placeholders::_1, std::ref(Window)));
 }
 

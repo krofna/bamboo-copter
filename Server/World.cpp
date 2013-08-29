@@ -45,7 +45,8 @@ void World::Load()
         Map* pMap = new Map(MapName, MapGUID, Width, Height);
         pMap->LoadObjects();
         LinkedList::Insert(pMap);
-    }}
+    }
+}
 
 void World::Run()
 {

@@ -33,6 +33,7 @@ int main(int argc, char** argv)
 
     sDataMgr = new DataMgr;
     sDataMgr->LoadFile("../Shared/test.tem");
+    sDataMgr->LoadFile("../Shared/TerrainTemplate.tem");
     Game* pGame = new Game("bamboo-copter");
     World* pWorld = new CWorld(pGame->GetWindow(), StartNetworking(io));
 

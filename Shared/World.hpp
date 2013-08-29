@@ -20,6 +20,7 @@ public:
     void Insert(WorldObject* pObject);
     void LoadMap(uint32 Entry);
 private:
+    sf::Texture* pTerrainTileset;
     sf::VertexArray VertexArray;
     sf::View View;
     sf::RenderWindow& Window;
