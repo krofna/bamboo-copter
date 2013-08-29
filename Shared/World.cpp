@@ -1,6 +1,10 @@
 #include "World.hpp"
+#include "WorldObject.hpp"
+#include "Shared/File.hpp"
+#include "Shared/DataMgr.hpp"
 
 World::World(sf::RenderWindow& Window) :
+VertexArray(sf::Quads),
 View(sf::FloatRect(0, 0, Window.getSize().x, Window.getSize().y)),
 Window(Window)
 {
@@ -8,6 +12,25 @@ Window(Window)
 
 World::~World()
 {
+}
+
+void World::LoadMap(uint32 Entry)
+{
+    File MapFile("../Shared/TestMap.map", std::ios::in); // PLACEHOLDER
+    uint32 TEntry;
+    TerrainTemplate* pTemplate;
+    uint32 i = 0, j = 0;
+    uint16 x, y, w, h;
+
+    while (MapFile >> TEntry)
+    {
+        pTemplate = sDataMgr->GetTerrainTemplate(TEntry);
+        MapFile >> x >> y >> w >> h;
+        VertexArray[i++].position = sf::Vector2f(x, y);
+        VertexArray[i++].position = sf::Vector2f(w, h);
+        VertexArray[j++].texCoords = sf::Vector2f(pTemplate->TexPos);
+        VertexArray[j++].texCoords = sf::Vector2f(pTemplate->Size);
+    }
 }
 
 void World::Draw()

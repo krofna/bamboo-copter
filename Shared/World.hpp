@@ -3,10 +3,11 @@
 
 #include "Shared/QuadTree.hpp"
 #include "Shared/GameState.hpp"
-#include "WorldObject.hpp"
+#include <SFML/Graphics/VertexArray.hpp>
 
-/* TODO: Terrain should be sf::VertexArray instead of stored in QuadTree along with other objects */
-class World : private QuadTree<WorldObject, float>, public GameState
+class WorldObject;
+
+class World : private QuadTree<WorldObject, float, LinkedList<WorldObject> >, public GameState
 {
 public:
     World(sf::RenderWindow& Window);
@@ -17,7 +18,9 @@ public:
     virtual void HandleEvent(sf::Event Event);
 
     void Insert(WorldObject* pObject);
+    void LoadMap(uint32 Entry);
 private:
+    sf::VertexArray VertexArray;
     sf::View View;
     sf::RenderWindow& Window;
 };

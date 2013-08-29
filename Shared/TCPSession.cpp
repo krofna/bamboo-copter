@@ -47,7 +47,21 @@ void TCPSession::HandleReceive(const boost::system::error_code& Error)
 
     sLog.Write(LOG_INFO, "Received Packet: %s, size: %u", OpcodeTable[RecPckt.GetOpcode()].name, RecPckt.GetSizeWithoutHeader());
 
-    (((WorldSession*)this)->*OpcodeTable[RecPckt.GetOpcode()].Handler)();
+    switch (OpcodeTable[RecPckt.GetOpcode()].ThreadSafety)
+    {
+        case PROCESS_IN_PLACE:
+            (((WorldSession*)this)->*OpcodeTable[RecPckt.GetOpcode()].Handler)();
+            break;
+        case PROCESS_WORLD_UPDATE:
+            RecPcktsMutex.lock();
+            RecPckts.push(RecPckt);
+            RecPcktsMutex.unlock();
+            break;
+        default:
+            sLog.Write(LOG_ERROR, "Opcode with invalid ThreadSafety. Check Opcodes.cpp");
+            break;
+    }
+
     Start();
 }
 
@@ -73,4 +87,15 @@ void TCPSession::HandleSend(const boost::system::error_code& Error)
     if (!MessageQueue.empty())
         async_write(Socket, buffer(MessageQueue.front().GetDataWithHeader(), MessageQueue.front().GetSizeWithHeader()),
             boost::bind(&TCPSession::HandleSend, shared_from_this(), placeholders::error));
+}
+
+void TCPSession::Update()
+{
+    RecPcktsMutex.lock();
+    while (!RecPckts.empty())
+    {
+        (((WorldSession*)this)->*OpcodeTable[RecPckts.front().GetOpcode()].Handler)();
+        RecPckts.pop();
+    }
+    RecPcktsMutex.unlock();
 }

@@ -3,17 +3,20 @@
 #include "Shared/DataMgr.hpp"
 #include "Pathfinder.hpp"
 #include "Shared/Defines.hpp"
+#include <boost/thread/thread.hpp>
+#include <boost/bind/bind.hpp>
 
 World* sWorld;
 
 extern void LoadScripts();
 
 World::World(boost::asio::io_service& io) :
+IsRunning(true),
 UpdateTimer(io),
 io(io)
 {
     sDataMgr = new DataMgr;
-    sPathfinder = new Pathfinder;
+    sPathfinder = new Pathfinder(io);
 }
 
 World::~World()
@@ -42,22 +45,29 @@ void World::Load()
         Map* pMap = new Map(MapName, MapGUID, Width, Height);
         pMap->LoadObjects();
         LinkedList::Insert(pMap);
-    }
-
-    UpdateTimer.expires_from_now(boost::posix_time::milliseconds(HEARTBEAT));
-    UpdateTimer.async_wait(std::bind(&World::Run, this));
-}
+    }}
 
 void World::Run()
 {
-    Update();
-    UpdateTimer.expires_at(UpdateTimer.expires_at() + boost::posix_time::milliseconds(HEARTBEAT));
-    UpdateTimer.async_wait(std::bind(&World::Run, this));
+    UpdateTimer.expires_from_now(boost::posix_time::milliseconds(HEARTBEAT));
+    UpdateTimer.async_wait(std::bind(&World::Update, this));
+
+    std::vector<boost::shared_ptr<boost::thread> > threads;
+    for (size_t i = 0; i < 2; ++i)
+    {
+        boost::shared_ptr<boost::thread> thread(new boost::thread(boost::bind(&boost::asio::io_service::run, &io)));
+        threads.push_back(thread);
+    }
+
+    for (size_t i = 0; i < threads.size(); ++i)
+        threads[i]->join();
 }
 
 void World::Update()
 {
     Foreach(std::bind(&Map::Update, std::placeholders::_1));
+    UpdateTimer.expires_at(UpdateTimer.expires_at() + boost::posix_time::milliseconds(HEARTBEAT));
+    UpdateTimer.async_wait(std::bind(&World::Update, this));
 }
 
 void World::ResetPathfinderNodes()

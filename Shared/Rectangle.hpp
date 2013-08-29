@@ -18,12 +18,12 @@ struct Rect : sf::Rect<T>
     {
     }
 
-    inline sf::Vector2<T> NW()
+    inline sf::Vector2<T> NW() const
     {
         return sf::Vector2<T>(this->left, this->top);
     }
 
-    inline sf::Vector2<T> Size()
+    inline sf::Vector2<T> Size() const
     {
         return sf::Vector2<T>(this->width, this->height);
     }

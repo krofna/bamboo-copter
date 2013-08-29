@@ -14,21 +14,35 @@ enum TemplateType
 {
     NULL_TEMPLATE       = 0x0,
     ANIMATION_TEMPLATE  = 0x1,
-    CREATURE_TEMPLATE   = 0x2
+    CREATURE_TEMPLATE   = 0x2,
+    TERRAIN_TEMPLATE    = 0x3,
+    MAP_TEMPLATE        = 0x4 // TODO
 };
 
-struct CAnimationTemplate
+struct Template
+{
+    uint32 Entry;
+};
+
+struct SpriteTemplate : Template
 {
     sf::Texture* pTexture;
-    std::vector<std::vector<sf::Vector2<uint16>>> TexPos;
-    std::vector<uint8> FramesPerAnim;
     sf::Vector2<uint16> Size;
-    uint32 Entry;
 };
 
-struct WorldObjectTemplate
+struct CAnimationTemplate : SpriteTemplate
 {
-    uint32 Entry;
+    std::vector<std::vector<sf::Vector2<uint16>>> TexPos;
+    std::vector<uint8> FramesPerAnim;
+};
+
+struct TerrainTemplate : SpriteTemplate
+{
+    sf::Vector2<uint16> TexPos;
+};
+
+struct WorldObjectTemplate : Template
+{
 };
 
 struct UnitTemplate : WorldObjectTemplate

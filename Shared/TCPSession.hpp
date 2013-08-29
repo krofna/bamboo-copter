@@ -3,6 +3,7 @@
 
 #include "Shared/Packet.hpp"
 #include <queue>
+#include <mutex>
 #include <boost/asio/deadline_timer.hpp>
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/asio/io_service.hpp>
@@ -23,6 +24,8 @@ public:
 
     void Send(Packet& Pckt);
 
+    void Update();
+
 protected:
     void Start();
     void HandleSend(const boost::system::error_code& Error);
@@ -32,7 +35,10 @@ protected:
     TCPSocket Socket;
     Packet RecPckt;
 
-	std::queue<Packet> MessageQueue;
+    std::queue<Packet> RecPckts; // Received
+	std::queue<Packet> MessageQueue; // To send
+
+    std::mutex RecPcktsMutex;
 };
 
 #endif

@@ -1,8 +1,8 @@
-template <class W, class U> template <class T>
-void QuadTree<W, U>::Traverse(T Func)
+template <class W, class U, class List> template <class T>
+void QuadTree<W, U, List>::Traverse(T Func)
 {
     if (pParent)
-        LinkedList<W>::Foreach(Func);
+        List::Foreach(Func);
 
     if (!NW)
         return;
@@ -13,15 +13,15 @@ void QuadTree<W, U>::Traverse(T Func)
     SE->Traverse(Func);
 }
 
-template <class W, class U> template <class T>
-void QuadTree<W, U>::TraverseArea(Rect<U> Area, T Func)
+template <class W, class U, class List> template <class T>
+void QuadTree<W, U, List>::TraverseArea(Rect<U> Area, T Func)
 {
     if (pParent)
     {
         if (!this->Area.intersects(Area))
             return;
 
-        LinkedList<W>::Foreach(Func);
+        List::Foreach(Func);
     }
 
     if (!NW)
@@ -33,14 +33,14 @@ void QuadTree<W, U>::TraverseArea(Rect<U> Area, T Func)
     SE->TraverseArea(Area, Func);
 }
 
-template <class W, class U>
-QuadTree<W, U>::QuadTree() :
+template <class W, class U, class List>
+QuadTree<W, U, List>::QuadTree() :
 QuadTree(Rect<U>(sf::Vector2<U>(0, 0), sf::Vector2<U>(std::numeric_limits<uint32>::max(), std::numeric_limits<uint32>::max())), nullptr)
 {
 }
 
-template <class W, class U>
-QuadTree<W, U>::QuadTree(Rect<U> Area, QuadTree* pParent) :
+template <class W, class U, class List>
+QuadTree<W, U, List>::QuadTree(Rect<U> Area, QuadTree* pParent) :
 Size(0),
 Area(Area),
 pParent(pParent),
@@ -51,14 +51,14 @@ SE(nullptr)
 {
 }
 
-template <class W, class U>
-QuadTree<W, U>::~QuadTree()
+template <class W, class U, class List>
+QuadTree<W, U, List>::~QuadTree()
 {
     Traverse(std::default_delete<W>());
 }
 
-template <class W, class U>
-bool QuadTree<W, U>::Insert(W* pObject)
+template <class W, class U, class List>
+bool QuadTree<W, U, List>::Insert(W* pObject)
 {
     if (pParent)
     {
@@ -67,7 +67,7 @@ bool QuadTree<W, U>::Insert(W* pObject)
 
         if (this->Size < MAX_QUAD_CAPACITY)
         {
-            LinkedList<W>::Insert(pObject);
+            List::Insert(pObject);
             ++Size;
             return true;
         }
@@ -89,12 +89,12 @@ bool QuadTree<W, U>::Insert(W* pObject)
     return false;
 }
 
-template <class W, class U>
-void QuadTree<W, U>::Remove(W* pObject)
+template <class W, class U, class List>
+void QuadTree<W, U, List>::Remove(W* pObject)
 {
     QuadTree* pTree = Locate(pObject);
 
-    for (LinkedList<W>* pIter = pTree; pIter != nullptr; pIter = pIter->Next())
+    for (List* pIter = pTree; pIter != nullptr; pIter = pIter->Next())
     {
         if (pIter->Data() == pObject)
         {
@@ -105,8 +105,8 @@ void QuadTree<W, U>::Remove(W* pObject)
     }
 }
 
-template <class W, class U>
-QuadTree<W, U>* QuadTree<W, U>::Locate(W* pObject)
+template <class W, class U, class List>
+QuadTree<W, U, List>* QuadTree<W, U, List>::Locate(W* pObject)
 {
     QuadTree* pTree;
 
@@ -115,7 +115,7 @@ QuadTree<W, U>* QuadTree<W, U>::Locate(W* pObject)
         if (!Area.intersects(pObject->GetRect()))
             return nullptr;
 
-        for (LinkedList<W>* pIter = this; pIter != nullptr; pIter = pIter->Next())
+        for (List* pIter = this; pIter != nullptr; pIter = pIter->Next())
             if (pIter->Data() == pObject)
                 return this;
     }
@@ -128,8 +128,8 @@ QuadTree<W, U>* QuadTree<W, U>::Locate(W* pObject)
     return nullptr;
 }
 
-template <class W, class U>
-void QuadTree<W, U>::Update(W* pObject)
+template <class W, class U, class List>
+void QuadTree<W, U, List>::Update(W* pObject)
 {
     QuadTree* pTree = Locate(pObject);
     if (pTree && !pTree->Area.intersects(pObject->GetRect()))
@@ -137,4 +137,21 @@ void QuadTree<W, U>::Update(W* pObject)
         pTree->Remove(pObject);
         Insert(pObject);
     }
+}
+
+template <class W, class U, class List>
+List* QuadTree<W, U, List>::At(Rect<U> Area)
+{
+    if (pParent)
+        if (this->Area.intersects(Area))
+            return this;
+
+    if (!NW)
+        return nullptr;
+
+    if (List* pList = NW->At(Area)) return pList;
+    if (List* pList = NE->At(Area)) return pList;
+    if (List* pList = SW->At(Area)) return pList;
+    if (List* pList = SE->At(Area)) return pList;
+    return nullptr;
 }

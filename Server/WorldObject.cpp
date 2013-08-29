@@ -42,16 +42,6 @@ void WorldObject::SetY(uint16 y)
     ObjectUpdate << (uint8)UPDATE_FIELD_Y << y;
 }
 
-uint16 WorldObject::GetX() const
-{
-    return Rectg.left;
-}
-
-uint16 WorldObject::GetY() const
-{
-    return Rectg.top;
-}
-
 uint64 WorldObject::GetGUID() const
 {
     return GUID;
@@ -113,9 +103,4 @@ WorldObjectTemplate* WorldObject::GetTemplate()
 uint64 WorldObject::GetNextGUID()
 {
     return NextGUID++;
-}
-
-void Terrain::ResetPathfinderNode()
-{
-    Node::Reset();
 }

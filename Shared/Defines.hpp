@@ -1,9 +1,11 @@
 #ifndef DEFINES_HPP
 #define DEFINES_HPP
 
-#define TILE_SIZE 64
+#define TILE_SIZE 64 // Deprecated: use PERFECTION_LEVEL
 #define HEARTBEAT 50 // Server
 #define GAME_HEARTBEAT 16 // Client
+#define PERFECTION_LEVEL 8 // In pixels
+
 
 enum
 {

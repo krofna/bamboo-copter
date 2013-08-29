@@ -3,30 +3,18 @@
 #include "Unit.hpp"
 #include "Map.hpp"
 #include "Shared/Log.hpp"
+#include "Shared/Defines.hpp"
 #include "World.hpp"
 #include <stack>
 
 Pathfinder* sPathfinder;
 
-const int PERFECTION_LEVEL = 8; // In pixels
-
-Pathfinder::Pathfinder() :
+Pathfinder::Pathfinder(boost::asio::io_service& io) :
+pMap(nullptr),
 GRAY(1),
-BLACK(2)
+BLACK(2),
+io(io)
 {
-    pWork = nullptr;
-}
-
-Pathfinder::~Pathfinder()
-{
-    WorkMutex.lock();
-    while (!WorkQueue.empty())
-    {
-        pWork = WorkQueue.front();
-        WorkQueue.pop();
-        delete pWork;
-    }
-    WorkMutex.unlock();
 }
 
 void Pathfinder::Enqueue(MotionMaster* pMotionMaster, sf::Vector2<uint16> Target)
@@ -35,22 +23,7 @@ void Pathfinder::Enqueue(MotionMaster* pMotionMaster, sf::Vector2<uint16> Target
     pJob->pMotionMaster = pMotionMaster;
     pJob->Origin = pMotionMaster->pMe->GetRect();
     pJob->Target = Target;
-    WorkMutex.lock();
-    WorkQueue.push(pJob);
-    WorkMutex.unlock();
-}
-
-void Pathfinder::ProcessAll()
-{
-    while (!WorkQueue.empty())
-    {
-        WorkMutex.lock();
-        pWork = WorkQueue.front();
-        WorkQueue.pop();
-        WorkMutex.unlock();
-        GeneratePath();
-        delete pWork;
-    }
+    io.post(std::bind(&Pathfinder::GeneratePath, this, pJob));
 }
 
 void Pathfinder::Relax(Node* pFirst, uint16 x, uint16 y, uint16 size, uint16 Cost)
@@ -58,6 +31,7 @@ void Pathfinder::Relax(Node* pFirst, uint16 x, uint16 y, uint16 size, uint16 Cos
     if (pMap->At(x, y, size)) // Collision
         return;
 
+    // TODO: Modify Cost depending on terrain
     Node* pSecond = pMap->TerrainAt(x, y, size);
     if (!pSecond) // No terrain
         return;
@@ -79,7 +53,7 @@ void Pathfinder::Relax(Node* pFirst, uint16 x, uint16 y, uint16 size, uint16 Cos
     }
 }
 
-void Pathfinder::GeneratePath()
+void Pathfinder::GeneratePath(Work* pWork)
 {
     std::stack<sf::Vector2<uint16> >* pPath = new std::stack<sf::Vector2<uint16> >;
 
@@ -113,6 +87,7 @@ void Pathfinder::GeneratePath()
                 pCurrent = pCurrent->pParent;
             }
             pWork->pMotionMaster->SetPath(pPath);
+            delete pWork;
             return;
         }
 
@@ -136,6 +111,7 @@ void Pathfinder::GeneratePath()
         pCurrent->Color = BLACK;
     }
 
+    delete pWork;
     delete pPath;
     sLog.Write(LOG_INFO, "Could not generate path from (%u, %u) to (%u, %u) for unit %llu!",
                pWork->Origin.left, pWork->Origin.top, pWork->Target.x, pWork->Target.y, pWork->pMotionMaster->pMe->GetGUID());

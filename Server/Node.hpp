@@ -1,16 +1,20 @@
 #ifndef NODE_HPP
 #define NODE_HPP
 
-class Node
+#include "Object.hpp"
+#include "Shared/LinkedList.hpp"
+
+class WorldObject;
+class Player;
+
+// Represents a terrain
+class Node : public Object, protected LinkedList<WorldObject>
 {
     friend class Pathfinder;
     friend class NodeQueue;
 public:
     Node();
     void Reset();
-    uint16 GetX() const;
-    uint16 GetY() const;
-    sf::Vector2<uint16> Position() const;
 
 private:
     Node* pParent;

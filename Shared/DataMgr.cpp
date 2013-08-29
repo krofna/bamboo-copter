@@ -1,5 +1,4 @@
 #include "DataMgr.hpp"
-#include "WorldObject.hpp"
 #include "Shared/Defines.hpp"
 #include "Shared/Log.hpp"
 
@@ -15,6 +14,7 @@ DataMgr::DataMgr()
 
 DataMgr::~DataMgr()
 {
+    // TODO: Deallocate textures
 }
 
 void DataMgr::LoadFile(std::string FileName)
@@ -26,6 +26,7 @@ void DataMgr::LoadFile(std::string FileName)
     {
         case ANIMATION_TEMPLATE: ProcessAnimationTemplateFile(DataFile); break;
         case CREATURE_TEMPLATE: ProcessCreatureTemplateFile(DataFile); break;
+        case TERRAIN_TEMPLATE: ProcessTerrainTemplateFile(DataFile); break;
         default: sLog.Write(LOG_ERROR, "Invalid Template file"); break;
     }
 }
@@ -42,6 +43,14 @@ CreatureTemplate* DataMgr::GetCreatureTemplate(uint32 Entry)
 {
     auto i = CreatureTemplates.find(Entry);
     if (i != CreatureTemplates.end())
+        return &i->second;
+    return nullptr;
+}
+
+TerrainTemplate* DataMgr::GetTerrainTemplate(uint32 Entry)
+{
+    auto i = TerrainTemplates.find(Entry);
+    if (i != TerrainTemplates.end())
         return &i->second;
     return nullptr;
 }
@@ -64,10 +73,8 @@ void DataMgr::ProcessAnimationTemplateFile(File& DataFile)
     uint8 x, y;
     uint16 sx, sy;
 
-    while (true)
+    while (DataFile >> Entry)
     {
-        DataFile >> Entry;
-        if (!DataFile) break;
         DataFile >> Texture;
 #ifdef CLIENT
         Template.pTexture = new sf::Texture;
@@ -97,11 +104,25 @@ void DataMgr::ProcessCreatureTemplateFile(File& DataFile)
 {
     CreatureTemplate Template;
 
-    while (true)
+    while (DataFile >> Template.Entry)
     {
-        DataFile >> Template.Entry;
-        if (!DataFile) break;
         DataFile >> Template.ScriptName;
         CreatureTemplates[Template.Entry] = Template;
+    }
+}
+
+void DataMgr::ProcessTerrainTemplateFile(File& DataFile)
+{
+    TerrainTemplate Template;
+    std::string Texture;
+
+    while (DataFile >> Template.Entry)
+    {
+        DataFile >> Texture;
+#ifdef CLIENT
+        Template.pTexture = new sf::Texture;
+        Template.pTexture->loadFromFile(Texture);
+#endif
+        DataFile >> Template.TexPos.x >> Template.TexPos.y >> Template.Size.x >> Template.Size.y;
     }
 }

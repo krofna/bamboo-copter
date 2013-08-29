@@ -3,39 +3,32 @@
 
 #include "NodeQueue.hpp"
 #include "Shared/Rectangle.hpp"
-#include <queue>
-#include <mutex>
+#include <boost/asio/io_service.hpp>
+#include <boost/utility.hpp>
 
 class MotionMaster;
-class Unit;
 class Map;
 
 /*
  * Todo: Implement A* heuristics
  * */
-class Pathfinder
+class Pathfinder : private boost::noncopyable
 {
 public:
-    Pathfinder();
-    ~Pathfinder();
-
+    Pathfinder(boost::asio::io_service& io);
     void Enqueue(MotionMaster* pMotionMaster, sf::Vector2<uint16> Target);
-    void ProcessAll();
-    void GeneratePath();
 
 private:
-    void Relax(Node* pFirst, uint16 x, uint16 y, uint16 size, uint16 Cost);
-
     struct Work
     {
         MotionMaster* pMotionMaster;
         Rect<uint16> Origin;
         sf::Vector2<uint16> Target;
     };
-    Work* pWork;
+
+    void GeneratePath(Work* pWork);
+    void Relax(Node* pFirst, uint16 x, uint16 y, uint16 size, uint16 Cost);
     Map* pMap;
-    std::queue<Work*> WorkQueue;
-    std::mutex WorkMutex;
 
     /* 1)
      * OLDWHITE  OLDGRAY   OLDBLACK  <-- WHITE |GRAY  BLACK ...
@@ -43,6 +36,7 @@ private:
     */
     uint16 GRAY, BLACK;
     NodeQueue OpenList;
+    boost::asio::io_service& io;
 };
 
 extern Pathfinder* sPathfinder;

@@ -18,7 +18,6 @@ public:
     ~WorldSession();
 
     void HandleNULL();
-    void HandleTemplate();
     void HandleLogin();
     void HandleObjectCreate();
     void HandleObjectUpdate();

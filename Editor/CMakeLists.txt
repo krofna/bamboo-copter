@@ -27,6 +27,7 @@ file(
 GLOB_RECURSE
 EDITOR_SRC
 ${CMAKE_SOURCE_DIR}/Editor/*
+${CMAKE_SOURCE_DIR}/Shared/File.cpp
 )
 
 file(

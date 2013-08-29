@@ -9,8 +9,8 @@
 
 static const uint32 MAX_QUAD_CAPACITY = 16;
 
-template <class W, class U>
-class QuadTree : private LinkedList<W>
+template <class W, class U, class List>
+class QuadTree : private List
 {
 public:
     QuadTree();
@@ -27,8 +27,7 @@ public:
     template <class T>
     void TraverseArea(Rect<U> Area, T Func);
 
-    template <class T>
-    void Foreach(T Func);
+    List* At(Rect<U> Area);
 
 private:
     QuadTree* Locate(W* pObject);

@@ -9,7 +9,8 @@
 
 WorldSession::WorldSession(io_service& io) :
 TCPSession(io),
-Resolver(io)
+Resolver(io),
+pWorld(nullptr)
 {
 }
 
@@ -53,13 +54,13 @@ void WorldSession::SendMoveHeroPacket(uint8 Direction)
     Send(Pckt);
 }
 
-void WorldSession::HandleTemplate()
-{
-}
-
 void WorldSession::HandleLogin()
 {
     sLog.Write(LOG_INFO, "Server accepted login");
+
+    uint32 MapEntry;
+    RecPckt >> MapEntry;
+    pWorld->LoadMap(MapEntry);
 }
 
 void WorldSession::HandleObjectCreate()

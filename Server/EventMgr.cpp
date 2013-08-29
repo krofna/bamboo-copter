@@ -29,7 +29,8 @@ void EventMgr::Update()
         else
             i->second.TimeLeft -= HEARTBEAT;
 
-        if (Erase) i = Events.erase(i);
+        if (Erase)
+            i = Events.erase(i);
         else ++i;
     }
 }
