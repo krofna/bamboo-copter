@@ -1,11 +1,11 @@
 #ifndef MAP_HPP
 #define MAP_HPP
 
-#include "Shared/QuadTree.hpp"
+#include "QuadTree.hpp"
 #include "Node.hpp"
 #include "Player.hpp"
 
-class Map : public QuadTree<WorldObject, uint16, Node>
+class Map : public QuadTree
 {
 public:
     Map(std::string Name, uint64 GUID, uint16 Width, uint16 Height);
@@ -25,6 +25,8 @@ public:
 
     void Insert(WorldObject* pObject);
 private:
+    void LoadTerrainData();
+
     LinkedList<Player> OnlinePlayers;
     std::string Name;
     uint64 MapGUID;

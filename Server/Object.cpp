@@ -1,5 +1,10 @@
 #include "Object.hpp"
 
+void Object::SetRect(Rect<uint16> NewRect)
+{
+    Rectg = NewRect;
+}
+
 uint16 Object::GetX() const
 {
     return Rectg.left;

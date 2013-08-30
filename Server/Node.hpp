@@ -8,13 +8,14 @@ class WorldObject;
 class Player;
 
 // Represents a terrain
-class Node : public Object, protected LinkedList<WorldObject>
+class Node : public Object, public LinkedList<WorldObject>
 {
     friend class Pathfinder;
     friend class NodeQueue;
 public:
     Node();
     void Reset();
+    void Remove(WorldObject* pObject);
 
 private:
     Node* pParent;

@@ -2,6 +2,7 @@
 #include "Shared/Database.hpp"
 #include "PlayerHolder.hpp"
 #include "Creature.hpp"
+#include "Shared/File.hpp"
 
 Map::Map(std::string Name, uint64 GUID, uint16 Width, uint16 Height) :
 QuadTree(sf::Rect<uint16>(0, 0, Width, Height), nullptr),
@@ -9,6 +10,7 @@ Name(Name),
 MapGUID(GUID)
 {
     Entry = 0; // PLACEHOLDER
+    LoadTerrainData();
 }
 
 void Map::Update()
@@ -115,4 +117,20 @@ uint32 Map::GetEntry() const
 void Map::Insert(WorldObject* pObject)
 {
     QuadTree::Insert(pObject);
+}
+
+void Map::LoadTerrainData()
+{
+    File MapFile("../Shared/TestMap.map", std::ios::in);
+    Rect<uint16> NodeRect;
+    uint32 Entry;
+    // TODO: Map template bla bla
+    while (MapFile >> Entry)
+    {
+        // pTemplate = sDataMgr->GetTerrainTemplate(TEntry);
+        MapFile >> NodeRect.left >> NodeRect.top >> NodeRect.width >> NodeRect.height;
+        Node* pNode = new Node;
+        pNode->SetRect(NodeRect);
+        assert(QuadTree::CreateNode(pNode));
+    }
 }

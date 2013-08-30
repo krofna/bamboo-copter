@@ -7,6 +7,7 @@
 class Object
 {
 public:
+    void SetRect(Rect<uint16> NewRect);
     Rect<uint16> GetRect() const;
     uint16 GetX() const;
     uint16 GetY() const;

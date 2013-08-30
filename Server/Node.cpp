@@ -1,5 +1,4 @@
 #include "Node.hpp"
-#include "WorldObject.hpp"
 
 Node::Node()
 {
@@ -9,4 +8,11 @@ Node::Node()
 void Node::Reset()
 {
     Color = 0;
+}
+
+void Node::Remove(WorldObject* pObject)
+{
+    for (LinkedList* pIter = this; pIter; pIter = pIter->Next())
+        if (pIter->Data() == pObject)
+            pIter->Unlink();
 }
