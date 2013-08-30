@@ -9,7 +9,7 @@ void GenDummyMap()
     t.Close();
 
     File f("../Shared/TestMap.map", std::ios::out);
-    f << (uint32)0 << (uint16)0 << (uint16)0 << (uint16)0 << uint16(1024) << uint16(1024);
+    f << (uint32)0 << (uint16)0 << (uint16)0 << uint16(1024) << uint16(1024);
     f.Close();
 }
 

@@ -55,6 +55,7 @@ void Pathfinder::Relax(Node* pFirst, uint16 x, uint16 y, uint16 size, uint16 Cos
 
 void Pathfinder::GeneratePath(Work* pWork)
 {
+    return;
     std::stack<sf::Vector2<uint16> >* pPath = new std::stack<sf::Vector2<uint16> >;
 
     pMap = pWork->pMotionMaster->pMe->GetMap();

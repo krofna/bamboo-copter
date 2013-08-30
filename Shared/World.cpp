@@ -2,6 +2,7 @@
 #include "WorldObject.hpp"
 #include "Shared/File.hpp"
 #include "Shared/DataMgr.hpp"
+#include <SFML/Graphics/Texture.hpp>
 
 World::World(sf::RenderWindow& Window) :
 VertexArray(sf::Quads),
@@ -19,18 +20,18 @@ void World::LoadMap(uint32 Entry)
     File MapFile("../Shared/TestMap.map", std::ios::in); // PLACEHOLDER
     uint32 TEntry;
     TerrainTemplate* pTemplate;
-    uint32 i = 0, j = 0;
+    uint32 i = 0;
     uint16 x, y, w, h;
 
-    VertexArray.resize(2); // TODO: Map template
+    VertexArray.resize(4); // TODO: Map template
     while (MapFile >> TEntry)
     {
         pTemplate = sDataMgr->GetTerrainTemplate(TEntry);
         MapFile >> x >> y >> w >> h;
-        VertexArray[i++].position = sf::Vector2f(x, y);
-        VertexArray[i++].position = sf::Vector2f(w, h);
-        VertexArray[j++].texCoords = sf::Vector2f(pTemplate->TexPos);
-        VertexArray[j++].texCoords = sf::Vector2f(pTemplate->Size);
+        VertexArray[i++] = sf::Vertex(sf::Vector2f(x, y), (sf::Vector2f(x, y)));
+        VertexArray[i++] = sf::Vertex(sf::Vector2f(x + w, y), sf::Vector2f(x + w, y));
+        VertexArray[i++] = sf::Vertex(sf::Vector2f(w, h), sf::Vector2f(w, h));
+        VertexArray[i++] = sf::Vertex(sf::Vector2f(x, y + h), sf::Vector2f(x, y + h));
     }
 
     pTerrainTileset = pTemplate->pTexture;
@@ -38,6 +39,7 @@ void World::LoadMap(uint32 Entry)
 
 void World::Draw()
 {
+    pTerrainTileset->setRepeated(true);
     Window.draw(VertexArray, pTerrainTileset);
     QuadTree::TraverseArea(View.getViewport(), std::bind(&WorldObject::Draw, std::placeholders::_1, std::ref(Window)));
 }
