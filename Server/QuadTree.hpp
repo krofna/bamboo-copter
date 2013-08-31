@@ -10,11 +10,11 @@
 
 class WorldObject;
 
-class QuadTree : private LinkedList<Node>
+class QuadTree
 {
 public:
     QuadTree();
-    QuadTree(Rect<uint16> Area, QuadTree* pParent);
+    QuadTree(Rect<uint16> Area);
     ~QuadTree();
 
     bool Insert(WorldObject* pObject);
@@ -27,26 +27,28 @@ public:
     template <class T>
     void TraverseArea(Rect<uint16> Area, T Func);
 
+    template <class T>
+    void TraverseNodes(T Func);
+
     Node* At(Rect<uint16> Area);
     bool CreateNode(Node* pArea);
     Node* Locate(WorldObject* pObject);
 
 private:
     Rect<uint16> Area;
-    QuadTree* pParent;
+
     QuadTree* NW;
     QuadTree* NE;
     QuadTree* SW;
     QuadTree* SE;
+    Node* pNode;
 };
 
 template <class T>
 void QuadTree::Traverse(T Func)
 {
-    if (pParent)
-        for (LinkedList* pIter = this; pIter; pIter = pIter->Next())
-            for (LinkedList<WorldObject>* pNest = pIter->Data(); pNest; pNest = pNest->Next())
-                Func(pNest->Data());
+    for (LinkedList<WorldObject>* pNest = pNode; pNest; pNest = pNest->Next())
+        Func(pNest->Data());
 
     if (!NW)
         return;
@@ -60,11 +62,9 @@ void QuadTree::Traverse(T Func)
 template <class T>
 void QuadTree::TraverseArea(Rect<uint16> Area, T Func)
 {
-    if (pParent)
-        if (this->Area.intersects(Area))
-            for (LinkedList* pIter = this; pIter; pIter = pIter->Next())
-                for (LinkedList<WorldObject>* pNest = pIter->Data(); pNest; pNest = pNest->Next())
-                    Func(pNest->Data());
+    if (this->Area.intersects(Area))
+        for (LinkedList<WorldObject>* pNest = pNode; pNest; pNest = pNest->Next())
+            Func(pNest->Data());
 
     if (!NW)
         return;
@@ -73,6 +73,21 @@ void QuadTree::TraverseArea(Rect<uint16> Area, T Func)
     NE->TraverseArea(Area, Func);
     SW->TraverseArea(Area, Func);
     SE->TraverseArea(Area, Func);
+}
+
+template <class T>
+void QuadTree::TraverseNodes(T Func)
+{
+    if (pNode)
+        Func(pNode);
+
+    if (!NW)
+        return;
+
+    NW->TraverseNodes(Func);
+    NE->TraverseNodes(Func);
+    SW->TraverseNodes(Func);
+    SE->TraverseNodes(Func);
 }
 
 #endif

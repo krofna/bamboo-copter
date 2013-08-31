@@ -20,7 +20,7 @@ public:
 private:
     Node* pParent;
     uint16 Cost;
-    uint16 Color;
+    uint16 Color; // uint32?? TODO
     size_t i;
 };
 

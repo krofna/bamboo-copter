@@ -5,7 +5,7 @@
 #include "Shared/File.hpp"
 
 Map::Map(std::string Name, uint64 GUID, uint16 Width, uint16 Height) :
-QuadTree(sf::Rect<uint16>(0, 0, Width, Height), nullptr),
+QuadTree(sf::Rect<uint16>(0, 0, Width, Height)),
 Name(Name),
 MapGUID(GUID)
 {
@@ -82,21 +82,15 @@ void Map::SendToPlayers(Packet& Pckt)
     OnlinePlayers.Foreach(std::bind(&Player::SendPacket, std::placeholders::_1, std::ref(Pckt)));
 }
 
-LinkedList<WorldObject>* Map::At(Rect<uint16> Where)
-{
-    ::LinkedList<WorldObject>* ObjectList = new LinkedList<WorldObject>;
-    QuadTree::TraverseArea(Where, std::bind(&::LinkedList<WorldObject>::Insert, ObjectList, std::placeholders::_1));
-    return ObjectList;
-}
-
 WorldObject* Map::At(uint16 X, uint16 Y, uint16 Size)
 {
-    return At(sf::Rect<uint16>(X, Y, Size, Size))->Data();
+    // TODO: iterate and find correct object
+    return TerrainAt(X, Y, Size)->Data();
 }
 
 void Map::ResetPathfinderNodes()
 {
-    //QuadTree::Traverse(std::bind(&::Node::Reset, std::placeholders::_1));
+    QuadTree::TraverseNodes(std::bind(&Node::Reset, std::placeholders::_1));
 }
 
 Node* Map::TerrainAt(uint16 X, uint16 Y, uint16 Size)

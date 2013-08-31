@@ -15,9 +15,8 @@ public:
     void AddPlayer(Player* pPlayer);
     void SendToPlayers(Packet& Pckt);
 
-    ::Node* TerrainAt(uint16 X, uint16 Y, uint16 Size);
-    WorldObject* At(uint16 X, uint16 Y, uint16 Size);
-    LinkedList<WorldObject>* At(Rect<uint16> Where);
+    Node* TerrainAt(uint16 X, uint16 Y, uint16 Size);
+    WorldObject* At(uint16 X, uint16 Y, uint16 Size); // Deprecated
 
     void ResetPathfinderNodes();
     uint64 GetGUID() const;

@@ -19,3 +19,8 @@ sf::Vector2<uint16> Object::Position() const
 {
     return Rectg.NW();
 }
+
+Rect<uint16> Object::GetRect() const
+{
+    return Rectg;
+}

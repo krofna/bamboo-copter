@@ -22,7 +22,7 @@ private:
     struct Work
     {
         MotionMaster* pMotionMaster;
-        Rect<uint16> Origin;
+        Rect<uint16> Origin; // TODO: pMotionMaster->pMe->GetPos
         sf::Vector2<uint16> Target;
     };
 

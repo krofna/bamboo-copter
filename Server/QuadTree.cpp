@@ -3,48 +3,32 @@
 #include "Shared/Log.hpp"
 
 QuadTree::QuadTree() :
-QuadTree(Rect<uint16>(sf::Vector2<uint16>(0, 0), sf::Vector2<uint16>(std::numeric_limits<uint16>::max(), std::numeric_limits<uint16>::max())), nullptr)
+QuadTree(Rect<uint16>(sf::Vector2<uint16>(0, 0), sf::Vector2<uint16>(std::numeric_limits<uint16>::max(), std::numeric_limits<uint16>::max())))
 {
 }
 
-QuadTree::QuadTree(Rect<uint16> Area, QuadTree* pParent) :
+QuadTree::QuadTree(Rect<uint16> Area) :
 Area(Area),
-pParent(pParent),
 NW(nullptr),
 NE(nullptr),
 SW(nullptr),
-SE(nullptr)
+SE(nullptr),
+pNode(nullptr)
 {
 }
 
 QuadTree::~QuadTree()
 {
     Traverse(std::default_delete<WorldObject>());
+    TraverseNodes(std::default_delete<Node>());
 }
 
 bool QuadTree::Insert(WorldObject* pObject)
 {
-    if (pParent)
+    if (pNode && pNode->GetRect().contains(pObject->GetRect()))
     {
-        if (!Area.intersects(pObject->GetRect()))
-            return false;
-
-        for (LinkedList* pIter = this; pIter != nullptr; pIter = pIter->Next())
-        {
-            if (pIter->Data()->GetRect().intersects(pObject->GetRect()))
-            {
-                pIter->Data()->Insert(pObject);
-                return true;
-            }
-        }
-        sLog.Write(LOG_ERROR, "Unaligned object! GUID: %llu", pObject->GetGUID());
-        return false;
-    }
-
-    if (!NW)
-    {
-        sLog.Write(LOG_ERROR, "Object outside of terrain! GUID: %llu", pObject->GetGUID());
-        return false;
+        pNode->Insert(pObject);
+        return true;
     }
 
     if (NW->Insert(pObject)) return true;
@@ -56,20 +40,14 @@ bool QuadTree::Insert(WorldObject* pObject)
 
 bool QuadTree::Remove(WorldObject* pObject)
 {
-    if (pParent)
+    if (pNode && pNode->GetRect().contains(pObject->GetRect()))
     {
-        if (!Area.intersects(pObject->GetRect()))
-            return false;
-
-        for (LinkedList* pIter = this; pIter != nullptr; pIter = pIter->Next())
+        for (LinkedList<WorldObject>* pNest = pNode; pNest != nullptr; pNest = pNest->Next())
         {
-            for (LinkedList<WorldObject>* pNest = pIter->Data(); pNest != nullptr; pNest = pNest->Next())
+            if (pNest->Data() == pObject)
             {
-                if (pNest->Data() == pObject)
-                {
-                    pNest->Unlink();
-                    return true;
-                }
+                pNest->Unlink();
+                return true;
             }
         }
         sLog.Write(LOG_ERROR, "Object is not where it should be! GUID: %llu", pObject->GetGUID());
@@ -87,28 +65,29 @@ Node* QuadTree::Locate(WorldObject* pObject)
 {
     Node* pTree;
 
-    if (pParent)
+    if (pNode->GetRect().contains(pObject->GetRect()))
     {
-        if (!Area.intersects(pObject->GetRect()))
-            return nullptr;
+        for (LinkedList<WorldObject>* pNest = pNode; pNest != nullptr; pNest = pNest->Next())
+            if (pNest->Data() == pObject)
+                return pNode;
 
-        for (LinkedList* pIter = this; pIter != nullptr; pIter = pIter->Next())
-            for (LinkedList<WorldObject>* pNest = pIter->Data(); pNest != nullptr; pNest = pNest->Next())
-                if (pNest->Data() == pObject)
-                    return pIter->Data();
+        sLog.Write(LOG_ERROR, "Object is not where it should be! GUID: %llu", pObject->GetGUID());
+        return pNode; // return regardless of error, required for Update to work
     }
 
     if ((pTree = NW->Locate(pObject))) return pTree;
     if ((pTree = NE->Locate(pObject))) return pTree;
     if ((pTree = SW->Locate(pObject))) return pTree;
     if ((pTree = SE->Locate(pObject))) return pTree;
+
+    sLog.Write(LOG_ERROR, "Object is outside of terrain! GUID: %llu", pObject->GetGUID());
     return nullptr;
 }
 
 void QuadTree::Update(WorldObject* pObject)
 {
     Node* pNode = Locate(pObject);
-    if (pNode && !pNode->GetRect().intersects(pObject->GetRect()))
+    if (pNode && !pNode->GetRect().contains(pObject->GetRect()))
     {
         pNode->Remove(pObject);
         Insert(pObject);
@@ -117,21 +96,15 @@ void QuadTree::Update(WorldObject* pObject)
 
 Node* QuadTree::At(Rect<uint16> Area)
 {
-    if (pParent)
-    {
-        if (!this->Area.intersects(Area))
-            return nullptr;
-
-        for (LinkedList* pIter = this; pIter != nullptr; pIter = pIter->Next())
-            if (pIter->Data()->GetRect() == Area)
-                return pIter->Data();
-
-        sLog.Write(LOG_ERROR, "Requested node at unaligned area!");
-        return nullptr;
-    }
+    if (this->Area.contains(Area))
+        if (pNode->GetRect().contains(Area))
+            return pNode;
 
     if (!NW)
+    {
+        sLog.Write(LOG_ERROR, "Requested node at unaligned area: %u %u %u %u", Area.left, Area.top, Area.width, Area.height);
         return nullptr;
+    }
 
     if (Node* pNode = NW->At(Area)) return pNode;
     if (Node* pNode = NE->At(Area)) return pNode;
@@ -142,22 +115,19 @@ Node* QuadTree::At(Rect<uint16> Area)
 
 bool QuadTree::CreateNode(Node* pArea)
 {
-    if (pParent)
+    if (!pNode && Area.intersects(pArea->GetRect()))
     {
-        if (!Area.intersects(pArea->GetRect()))
-            return false;
-
-        LinkedList::Insert(pArea);
+        pNode = pArea;
         return true;
     }
 
     if (!NW)
     {
         sf::Vector2<uint16> HalfArea = Area.Size() / uint16(2);
-        NW = new QuadTree(Rect<uint16>(Area.NW(), HalfArea), this);
-        NE = new QuadTree(Rect<uint16>(Area.NW() + sf::Vector2<uint16>(Area.Size().x / 2, 0), HalfArea), this);
-        SW = new QuadTree(Rect<uint16>(Area.NW() + sf::Vector2<uint16>(0, Area.Size().y / 2), HalfArea), this);
-        SE = new QuadTree(Rect<uint16>(HalfArea, HalfArea), this);
+        NW = new QuadTree(Rect<uint16>(Area.NW(), HalfArea));
+        NE = new QuadTree(Rect<uint16>(Area.NW() + sf::Vector2<uint16>(Area.Size().x / 2, 0), HalfArea));
+        SW = new QuadTree(Rect<uint16>(Area.NW() + sf::Vector2<uint16>(0, Area.Size().y / 2), HalfArea));
+        SE = new QuadTree(Rect<uint16>(HalfArea, HalfArea));
     }
 
     if (NW->CreateNode(pArea)) return true;

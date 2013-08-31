@@ -19,11 +19,6 @@ ObjectUpdate(SMSG_OBJECT_UPDATE)
     ObjectUpdate << GUID;
 }
 
-Rect<uint16> Object::GetRect() const
-{
-    return Rectg;
-}
-
 void WorldObject::SetPosition(sf::Vector2<uint16> NewPos)
 {
     SetX(NewPos.x);
