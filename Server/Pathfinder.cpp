@@ -75,7 +75,7 @@ void Pathfinder::GeneratePath(Work* pWork)
     {
         pCurrent = OpenList.ExtractMin();
 
-        if (pCurrent->Position() == pWork->Target)
+        if (pCurrent->GetRect().contains(pWork->Target))
         {
             // TODO: Optimize directions instead of pixel perfect points
             // => if (prev - curr == curr - next) => same direction vector
@@ -110,8 +110,8 @@ void Pathfinder::GeneratePath(Work* pWork)
         pCurrent->Color = BLACK;
     }
 
-    delete pWork;
-    delete pPath;
     sLog.Write(LOG_INFO, "Could not generate path from (%u, %u) to (%u, %u) for unit %llu!",
                pWork->Origin.left, pWork->Origin.top, pWork->Target.x, pWork->Target.y, pWork->pMotionMaster->pMe->GetGUID());
+    delete pWork;
+    delete pPath;
 }
