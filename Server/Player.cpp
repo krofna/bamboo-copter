@@ -3,9 +3,16 @@
 
 Player::Player(uint64 GUID, uint32 Entry, std::string Username) :
 Unit(GUID, Entry),
+pSession(nullptr),
 Username(Username)
 {
     pTemplate = sDataMgr->GetHeroTemplate(Entry);
+}
+
+void Player::Update()
+{
+    if (pSession)
+        pSession->Update();
 }
 
 void Player::SendPacket(Packet& Pckt)

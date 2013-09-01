@@ -6,12 +6,10 @@
 #include "Shared/Templates.hpp"
 #include "Shared/File.hpp"
 
-class WorldObject;
-
 class DataMgr
 {
 public:
-	DataMgr();
+    DataMgr();
     ~DataMgr();
 
     void LoadFile(std::string FileName);

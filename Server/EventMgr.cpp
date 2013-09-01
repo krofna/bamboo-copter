@@ -24,12 +24,15 @@ void EventMgr::Update()
             i->second.Callback();
             if (!i->second.Perpetual)
                 Erase = true;
-            else i->second.TimeLeft = i->second.Time;
+            else
+                i->second.TimeLeft = i->second.Time;
         }
         else
             i->second.TimeLeft -= HEARTBEAT;
 
-        if (Erase) i = Events.erase(i);
-        else ++i;
+        if (Erase)
+            i = Events.erase(i);
+        else
+            ++i;
     }
 }

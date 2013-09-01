@@ -11,7 +11,13 @@ pPlayer(nullptr)
 {
 }
 
-void WorldSession::HandleLogin()
+WorldSession::~WorldSession()
+{
+    if (pPlayer)
+        pPlayer->pSession = nullptr;
+}
+
+void WorldSession::HandleLogin() // SAFE
 {
     std::string Username;
     RecPckt >> Username;
@@ -21,26 +27,30 @@ void WorldSession::HandleLogin()
         pPlayer->pSession = this;
         pPlayer->GetMap()->AddPlayer(pPlayer);
     }
+
+    Packet Pckt(MSG_LOGIN);
+    Pckt << pPlayer->GetMap()->GetEntry();
+    Send(Pckt);
 }
 
-void WorldSession::HandleMove()
+void WorldSession::HandleMove() // UNSAFE
 {
     uint8 Direction;
-    RecPckt >> Direction;
+    RecPckts.front() >> Direction;
 
     switch (Direction)
     {
     case MOVE_UP:
-        pPlayer->SetY(pPlayer->GetY() - 1);
+        pPlayer->SetY(pPlayer->GetY() - PERFECTION_LEVEL);
         break;
     case MOVE_DOWN:
-        pPlayer->SetY(pPlayer->GetY() + 1);
+        pPlayer->SetY(pPlayer->GetY() + PERFECTION_LEVEL);
         break;
     case MOVE_LEFT:
-        pPlayer->SetX(pPlayer->GetX() - 1);
+        pPlayer->SetX(pPlayer->GetX() - PERFECTION_LEVEL);
         break;
     case MOVE_RIGHT:
-        pPlayer->SetX(pPlayer->GetX() + 1);
+        pPlayer->SetX(pPlayer->GetX() + PERFECTION_LEVEL);
         break;
     }
 }

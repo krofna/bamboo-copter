@@ -19,6 +19,7 @@ public:
 
     void ResetPathfinderNodes();
 private:
+    volatile bool IsRunning;
     boost::asio::deadline_timer UpdateTimer;
     boost::asio::io_service& io;
 };

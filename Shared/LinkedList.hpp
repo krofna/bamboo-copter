@@ -66,7 +66,7 @@ void LinkedList<T>::Unlink()
 template <class T>
 void LinkedList<T>::Insert(T* pData)
 {
-    if (!pData)
+    if (!this->pData)
         this->pData = pData;
     else
     {

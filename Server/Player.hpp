@@ -11,6 +11,7 @@ class Player : public Unit
 public:
     Player(uint64 GUID, uint32 Entry, std::string Username);
 
+    virtual void Update();
     std::string GetName() const;
     void SendPacket(Packet& Pckt);
 

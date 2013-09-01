@@ -20,7 +20,7 @@ int main(int argc, char** argv)
     sWorld = new World(io);
     pAcceptor->Accept();
     sWorld->Load();
-    io.run();
+    sWorld->Run();
 
     delete sWorld;
     return 0;

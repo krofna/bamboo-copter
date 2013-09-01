@@ -20,7 +20,8 @@ public:
     LinkedList<Terrain>* TerrainAt(Rect<uint16> Where);
 
     void ResetPathfinderNodes();
-    uint64 GetGUID();
+    uint64 GetGUID() const;
+    uint32 GetEntry() const;
 
     void Insert(WorldObject* pObject);
 private:
@@ -28,6 +29,7 @@ private:
     LinkedList<Player> OnlinePlayers;
     std::string Name;
     uint64 MapGUID;
+    uint32 Entry;
 };
 
 #endif

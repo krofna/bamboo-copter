@@ -7,7 +7,8 @@ Map::Map(std::string Name, uint64 GUID, uint16 Width, uint16 Height) :
 QuadTree(sf::Rect<uint16>(0, 0, Width, Height), nullptr),
 Objects(sf::Rect<uint16>(0, 0, Width, Height), nullptr),
 Name(Name),
-MapGUID(GUID)
+MapGUID(GUID),
+Entry(0) // PLACEHOLDER
 {
 }
 
@@ -110,9 +111,14 @@ void Map::ResetPathfinderNodes()
     QuadTree::Traverse(std::bind(&Terrain::ResetPathfinderNode, std::placeholders::_1));
 }
 
-uint64 Map::GetGUID()
+uint64 Map::GetGUID() const
 {
     return MapGUID;
+}
+
+uint32 Map::GetEntry() const
+{
+    return Entry;
 }
 
 void Map::Insert(WorldObject* pObject)

@@ -38,3 +38,13 @@ File& File::operator<< (std::string Data)
     Write<char>(null);
     return *this;
 }
+
+template <>
+#ifdef _MSC_VER
+inline
+#endif
+File& File::operator<< (const char* Data)
+{
+    *this << std::string(Data);
+    return *this;
+}

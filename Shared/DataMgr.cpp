@@ -1,5 +1,4 @@
 #include "DataMgr.hpp"
-#include "WorldObject.hpp"
 #include "Shared/Defines.hpp"
 #include "Shared/Log.hpp"
 
@@ -15,6 +14,7 @@ DataMgr::DataMgr()
 
 DataMgr::~DataMgr()
 {
+    // TODO: Deallocate textures
 }
 
 void DataMgr::LoadFile(std::string FileName)

@@ -7,7 +7,8 @@
 MotionMaster::MotionMaster(Unit* pMe) :
 pPath(nullptr),
 MotionStatus(MOTION_STOP),
-pMe(pMe)
+pMe(pMe),
+pTarget(nullptr)
 {
 }
 
