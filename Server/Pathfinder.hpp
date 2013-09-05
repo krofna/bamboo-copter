@@ -2,6 +2,7 @@
 #define PATHFINDER_HPP
 
 #include "NodeQueue.hpp"
+#include "Shared/Grid.hpp"
 #include "Shared/Rectangle.hpp"
 #include <boost/asio/io_service.hpp>
 #include <boost/utility.hpp>
